@@ -17,3 +17,7 @@ script:
   - autoreconf -i
   - ./configure
   - make -j distcheck
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
