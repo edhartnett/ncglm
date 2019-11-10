@@ -1,0 +1,4 @@
+
+
+#define ncglm_VERSION_MAJOR @ncglm_VERSION_MAJOR@
+#define ncglm_VERSION_MINOR @ncglm_VERSION_MINOR@
