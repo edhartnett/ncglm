@@ -27,8 +27,8 @@ tst_glm_read_arrays_SOURCES = tst_glm_read_arrays.c un_test.h tst_utils.c
 # Run our test program.
 TESTS = run_glm_tests.sh 
 
-# Make sure this file is included in distribution.
-EXTRA_DIST = run_glm_tests.sh
+# Make sure these files are included in distribution.
+EXTRA_DIST = run_glm_tests.sh CMakeLists.txt
 
 # Clean data files for distclean target.
 DISTCLEANFILES = *.nc
