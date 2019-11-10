@@ -7,6 +7,6 @@
 # This directory stores libtool macros, put there by aclocal.
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = src test
+SUBDIRS = cmake src test
 
-EXTRA_DIST = test-driver-verbose LICENSE README.md
+EXTRA_DIST = test-driver-verbose LICENSE README.md CMakeLists.txt
