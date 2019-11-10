@@ -9,4 +9,4 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = src test
 
-EXTRA_DIST = test_driver_verbose LICENSE README.md
+EXTRA_DIST = test-driver-verbose LICENSE README.md
