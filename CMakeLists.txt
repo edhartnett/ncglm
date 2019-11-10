@@ -4,7 +4,12 @@
 #
 # Ed Hartnett 11/10/19
 
-cmake_minimum_required(VERSION 3.10)
+# This will use any cmake between 3.1 and 3.15, preferint later
+# versions with updated policies.
+cmake_minimum_required(VERSION 3.1...3.15)
+if (${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 
 # set the project name
 project(ncglm VERSION 1.0)
