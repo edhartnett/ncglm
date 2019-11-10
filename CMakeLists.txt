@@ -26,5 +26,9 @@ include_directories("${NETCDF_INCLUDES}")
 # Create a config.h.
 configure_file(config.h.cmake.in config.h)
 
+# Turn on testing.
+enable_testing()
+include(CTest)
+
 # Build in this subdirectory.
 add_subdirectory(src)
