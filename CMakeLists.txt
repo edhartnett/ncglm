@@ -31,4 +31,4 @@ enable_testing()
 include(CTest)
 
 # Build in this subdirectory.
-add_subdirectory(src)
+add_subdirectory(src test)
