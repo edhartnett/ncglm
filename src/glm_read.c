@@ -1,8 +1,8 @@
-/*
-  Code to read data from the GOES-17 Global Lightning Mapper.
-
-  Ed Hartnett, 10/10/19
-  Amsterdam
+/**
+ * @file
+ * Code to read data from the GOES-17 Global Lightning Mapper.
+ *
+ * @author Ed Hartnett, 10/10/19, Amsterdam
 */
 
 #include <stdio.h>
@@ -16,15 +16,19 @@
 #include <netcdf.h>
 #include "goes_glm.h"
 
-/* Attribute names. */
+/** Name of title attribute. */
 #define TITLE "title"
+
+/** Name of summary attribute. */
 #define SUMMARY "summary"
+
+/** Name of platform_ID attribute. */
 #define PLATFORM_ID "platform_ID"
 
-/* Number of timing runs when -t option is used. */
+/** Number of timing runs when -t option is used. */
 #define NUM_TRIALS 10
 
-/* Usage description. */
+/** Usage description. */
 #define USAGE   "\
   [-v]        Verbose\n\
   [-t]        Perform timing runs\n"
@@ -208,8 +212,17 @@ glm_read_event_vars(int ncid, int nevents, GLM_EVENT_T *event)
     return 0;
 }
 
-/* Read and unpack all the group data in the file. It will be loaded
- * into the pre-allocated array of struct group. */
+/**
+ * Read and unpack all the group data in the file. It will be loaded
+ * into the pre-allocated array of struct group.
+ *
+ * @param ncid ID of already opened GLM file.
+ * @param ngroups The number of groups.
+ * @param group Pointer to already-allocated arrat of GLM_GROUP_T.
+ *
+ * @return 0 for success, error code otherwise.
+ * @author Ed Hartnett
+*/
 int
 read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group)
 {
@@ -362,8 +375,17 @@ read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group)
     return 0;
 }
 
-/* Read and unpack all the flash data in the file. It will be loaded
- * into the pre-allocated array of struct flash. */
+/**
+ * Read and unpack all the flash data in the file. It will be loaded
+ * into the pre-allocated array of struct flash.
+ *
+ * @param ncid ID of already opened GLM file.
+ * @param nflashes The number of flashes.
+ * @param flash Pointer to already-allocated arrat of GLM_FLASH_T.
+ *
+ * @return 0 for success, error code otherwise.
+ * @author Ed Hartnett
+ */
 int
 read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash)
 {
@@ -557,6 +579,17 @@ read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash)
     return 0;
 }
 
+/**
+ * Read the dimensions.
+ *
+ * @param ncid ID of already opened GLM file.
+ * @param nevents The number of events.
+ * @param ngroups The number of groups.
+ * @param nflashes The number of flashes.
+ *
+ * @return 0 for success, error code otherwise.
+ * @author Ed Hartnett
+ */
 int
 read_dims(int ncid, size_t *nevents, size_t *ngroups, size_t *nflashes)
 {
@@ -610,6 +643,15 @@ read_dims(int ncid, size_t *nevents, size_t *ngroups, size_t *nflashes)
     return 0;
 }
 
+/**
+ * Read the scalars and small variables from the GLM file.
+ *
+ * @param ncid ID of already opened GLM file.
+ * @param glm_scalar Pointer to already allocated GLM_SCALAR_T.
+ *
+ * @return 0 for success, error code otherwise.
+ * @author Ed Hartnett
+ */
 int
 read_scalars(int ncid, GLM_SCALAR_T *glm_scalar)
 {
@@ -772,51 +814,56 @@ read_scalars(int ncid, GLM_SCALAR_T *glm_scalar)
     return 0;
 }
 
-/*
-  From GOES R SERIESPRODUCT DEFINITION AND USERS’ GUIDE(PUG) Vol 3
-  (https://www.goes-r.gov/users/docs/PUG-L1b-vol3.pdf)
-
-  The classic model for netCDF (used by the GS) does not support
-  unsigned integers larger than 8 bits.  Many of the variables in
-  GOES-R netCDF files are unsigned integers of 16-bit or 32-bit
-  length.  The following process is recommended to convert these
-  unsigned integers:
-
-  1.Retrieve the variable data from the netCDF file.
-
-  2.For this variable, retrieve the attribute “_Unsigned”.
-
-  3.If the “_Unsigned” attribute is set to “true” or “True”, then
-  cast the variable data to be unsigned.
-
-  The steps above must be completed before applying the
-  scale_factor and add_offset values to convert from scaled
-  integer to science units.  Also, the valid_range and _FillValue
-  attribute values are to be governed by the “_Unsigned” attribute
-
-  From a netCDF group email:
-  https://www.unidata.ucar.edu/mailing_lists/archives/netcdfgroup/2002/msg00034.html
-
-  Normally you store a group of numbers, all with the same scale
-  and offset. So first you calculate the min and max of that group
-  of numbers. Also let max_integer = maximum integer (eg for
-  INTEGER*2 this equals 32,167).
-
-  then
-  offset = min
-  scale = max_integer / (max - min)
-
-  store this number into netcdf file:
-
-  store_x = (x - offset) * scale = max_integer * (x - min) / (max - min)
-
-  note that when x = min, store_x = 0, and when x = max, store_x
-  max_integer.
-
-  the reading program should use the formula
-
-  x = store_x/scale + offset.
-
+/**
+ * From GOES R SERIESPRODUCT DEFINITION AND USERS’ GUIDE(PUG) Vol 3
+ * (https://www.goes-r.gov/users/docs/PUG-L1b-vol3.pdf)
+ *
+ * The classic model for netCDF (used by the GS) does not support
+ * unsigned integers larger than 8 bits.  Many of the variables in
+ * GOES-R netCDF files are unsigned integers of 16-bit or 32-bit
+ * length.  The following process is recommended to convert these
+ * unsigned integers:
+ *
+ * 1.Retrieve the variable data from the netCDF file.
+ *
+ * 2.For this variable, retrieve the attribute “_Unsigned”.
+ *
+ * 3.If the “_Unsigned” attribute is set to “true” or “True”, then
+ * cast the variable data to be unsigned.
+ *
+ * The steps above must be completed before applying the scale_factor
+ * and add_offset values to convert from scaled integer to science
+ * units.  Also, the valid_range and _FillValue attribute values are
+ * to be governed by the “_Unsigned” attribute
+ *
+ * From a netCDF group email:
+ * https://www.unidata.ucar.edu/mailing_lists/archives/netcdfgroup/2002/msg00034.html
+ *
+ * Normally you store a group of numbers, all with the same scale and
+ * offset. So first you calculate the min and max of that group of
+ * numbers. Also let max_integer = maximum integer (eg for INTEGER*2
+ * this equals 32,167).
+ *
+ *  then
+ *  offset = min
+ *  scale = max_integer / (max - min)
+ *
+ *  store this number into netcdf file:
+ *
+ *  store_x = (x - offset) * scale = max_integer * (x - min) / (max - min)
+ *
+ *  note that when x = min, store_x = 0, and when x = max, store_x
+ *  max_integer.
+ *
+ *  the reading program should use the formula
+ *
+ *  x = store_x/scale + offset.
+ *
+ * @param file_name Name of the GLM file.
+ * @param verbose Non-zero for some printf output.
+ *
+ * @return 0 for success, error code otherwise.
+ * @author Ed Hartnett
 */
 int
 glm_read_file(char *file_name, int verbose)

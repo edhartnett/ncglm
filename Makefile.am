@@ -7,6 +7,11 @@
 # This directory stores libtool macros, put there by aclocal.
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = cmake src test
+# Does the user want to build documentation?
+if BUILD_DOCS
+DOCS = docs
+endif
+
+SUBDIRS = cmake src test ${DOCS}
 
 EXTRA_DIST = test-driver-verbose LICENSE README.md CMakeLists.txt
