@@ -35,6 +35,7 @@ extern "C" {
     int glm_read_file(char *file_name, int verbose);
     int glm_read_file_arrays(char *file_name, int verbose);
 
+
 #if defined(__cplusplus)
 }
 #endif

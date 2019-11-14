@@ -28,11 +28,6 @@
 /** Number of timing runs when -t option is used. */
 #define NUM_TRIALS 10
 
-/** Usage description. */
-#define USAGE   "\
-  [-v]        Verbose\n\
-  [-t]        Perform timing runs\n"
-
 /**
  * Read and unpack all the event data in the file. It will be loaded
  * into the pre-allocated array of struct event. 
@@ -60,13 +55,16 @@
  *
  * @param ncid ID of already opened GLM file.
  * @param nevents The number of events.
- * @param event Pointer to already-allocated arrat of GLM_EVENT_T.
+ * @param event Pointer to already-allocated arrat of GLM_EVENT_T, or
+ * NULL if array reads are being done.
+ * @param event_id Pointer to already-allocated array of int for
+ * event_id data, or NULL if struct reads are being done.
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
 */
 static int
-read_event_vars(int ncid, int nevents, GLM_EVENT_T *event)
+read_event_vars(int ncid, int nevents, GLM_EVENT_T *event, int *event_id)
 {
     /* Event varids. */
     int event_id_varid;
@@ -74,7 +72,7 @@ read_event_vars(int ncid, int nevents, GLM_EVENT_T *event)
     int event_energy_varid, event_parent_group_id_varid;
 
     /* Storage for packed data. */
-    int *event_id = NULL;
+    int *my_event_id = NULL;
     short *event_lat = NULL;
     short *event_time_offset = NULL, *event_lon = NULL;
     short *event_energy = NULL;
@@ -90,10 +88,10 @@ read_event_vars(int ncid, int nevents, GLM_EVENT_T *event)
     int ret;
 
     /* Check inputs. */
-    assert(ncid && event && nevents > 0);
+    assert(ncid && nevents > 0 && (event || event_id));
 
     /* Allocate storeage for event variables. */
-    if (!(event_id = malloc(nevents * sizeof(int))))
+    if (!(my_event_id = malloc(nevents * sizeof(int))))
 	return GLM_ERR_MEMORY;
     if (!(event_time_offset = malloc(nevents * sizeof(short))))
 	return GLM_ERR_TIMER;
@@ -144,7 +142,7 @@ read_event_vars(int ncid, int nevents, GLM_EVENT_T *event)
 	NC_ERR(ret);
     
     /* Read the event variables. */
-    if ((ret = nc_get_var_int(ncid, event_id_varid, event_id)))
+    if ((ret = nc_get_var_int(ncid, event_id_varid, my_event_id)))
 	NC_ERR(ret);
     if ((ret = nc_get_var_short(ncid, event_time_offset_varid, event_time_offset)))
 	NC_ERR(ret);
@@ -161,21 +159,28 @@ read_event_vars(int ncid, int nevents, GLM_EVENT_T *event)
      * GLM_EVENT. */
     for (i = 0; i < nevents; i++)
     {
-	event[i].id = event_id[i];
-	event[i].time_offset = (float)((unsigned short)event_time_offset[i]) *
-	    (unsigned short)event_time_offset_scale + (unsigned short)event_time_offset_offset;
-	event[i].lat = (float)((unsigned short)event_lat[i]) *
-	    (unsigned short)event_lat_scale + (unsigned short)event_lat_offset;
-	event[i].lon = (float)((unsigned short)event_lon[i]) *
-	    (unsigned short)event_lon_scale + (unsigned short)event_lon_offset;
-	event[i].energy = (float)((unsigned short)event_energy[i]) *
-	    (unsigned short)event_energy_scale + (unsigned short)event_energy_offset;
-	event[i].parent_group_id = event_parent_group_id[i];
+        if (event) /* fill structs */
+        {
+            event[i].id = my_event_id[i];
+            event[i].time_offset = (float)((unsigned short)event_time_offset[i]) *
+                (unsigned short)event_time_offset_scale + (unsigned short)event_time_offset_offset;
+            event[i].lat = (float)((unsigned short)event_lat[i]) *
+                (unsigned short)event_lat_scale + (unsigned short)event_lat_offset;
+            event[i].lon = (float)((unsigned short)event_lon[i]) *
+                (unsigned short)event_lon_scale + (unsigned short)event_lon_offset;
+            event[i].energy = (float)((unsigned short)event_energy[i]) *
+                (unsigned short)event_energy_scale + (unsigned short)event_energy_offset;
+            event[i].parent_group_id = event_parent_group_id[i];
+        }
+        else /* fill arrays */
+        {
+            event_id[i] = my_event_id[i];
+        }
     }
 
     /* Free event storage. */
-    if (event_id)
-	free(event_id);
+    if (my_event_id)
+	free(my_event_id);
     if (event_time_offset)
 	free(event_time_offset);
     if (event_lat)
@@ -202,13 +207,36 @@ read_event_vars(int ncid, int nevents, GLM_EVENT_T *event)
  * @author Ed Hartnett
 */
 int
-glm_read_event_vars(int ncid, int nevents, GLM_EVENT_T *event)
+glm_read_event_structs(int ncid, int nevents, GLM_EVENT_T *event)
 {
     int ret;
     
-    if ((ret = read_event_vars(ncid, nevents, event)))
+    if ((ret = read_event_vars(ncid, nevents, event, NULL)))
 	return ret;
     
+    return 0;
+}
+
+/**
+ * Read and unpack all the event data in the file. It will be loaded
+ * into the pre-allocated array of struct event.
+ *
+ * @param ncid ID of already opened GLM file.
+ * @param nevents The number of events.
+ * @param event_id Pointer to already-allocated arrat of int for
+ * event_id values.
+ *
+ * @return 0 for success, error code otherwise.
+ * @author Ed Hartnett
+*/
+int
+glm_read_event_arrays(int ncid, int nevents, int *event_id)
+{
+    int ret;
+
+    if ((ret = read_event_vars(ncid, nevents, NULL, event_id)))
+	return ret;
+
     return 0;
 }
 
@@ -914,7 +942,7 @@ glm_read_file(char *file_name, int verbose)
 	return GLM_ERR_MEMORY;
 
     /* Read the vars. */
-    if ((ret = read_event_vars(ncid, nevents, event)))
+    if ((ret = glm_read_event_structs(ncid, nevents, event)))
 	return GLM_ERR_MEMORY;
     if ((ret = read_group_vars(ncid, ngroups, group)))
 	return GLM_ERR_MEMORY;
@@ -951,8 +979,8 @@ glm_read_file_arrays(char *file_name, int verbose)
 
     size_t nevents, ngroups, nflashes;
 
-    /* Structs of events, groups, flashes. */
-    GLM_EVENT_T *event;
+    /* Arrays of events, groups, flashes. */
+    int *event_id;
     GLM_GROUP_T *group;
     GLM_FLASH_T *flash;
     GLM_SCALAR_T glm_scalar;
@@ -985,7 +1013,7 @@ glm_read_file_arrays(char *file_name, int verbose)
 	       ngroups, nevents);
 
     /* Allocate storage. */
-    if (!(event = malloc(nevents * sizeof(GLM_EVENT_T))))
+    if (!(event_id = malloc(nevents * sizeof(int))))
 	return GLM_ERR_MEMORY;
     if (!(group = malloc(ngroups * sizeof(GLM_GROUP_T))))
 	return GLM_ERR_MEMORY;
@@ -993,7 +1021,7 @@ glm_read_file_arrays(char *file_name, int verbose)
 	return GLM_ERR_MEMORY;
 
     /* Read the vars. */
-    if ((ret = read_event_vars(ncid, nevents, event)))
+    if ((ret = glm_read_event_arrays(ncid, nevents, event_id)))
 	return GLM_ERR_MEMORY;
     if ((ret = read_group_vars(ncid, ngroups, group)))
 	return GLM_ERR_MEMORY;
@@ -1007,7 +1035,7 @@ glm_read_file_arrays(char *file_name, int verbose)
 	NC_ERR(ret);
 
     /* Free memory. */
-    free(event);
+    free(event_id);
     free(group);
     free(flash);
     
