@@ -59,12 +59,24 @@
  * NULL if array reads are being done.
  * @param event_id Pointer to already-allocated array of int for
  * event_id data, or NULL if struct reads are being done.
+ * @param time_offset Pointer to already-allocated array of unsigned
+ * int for time_offset data, or NULL if struct reads are being done.
+ * @param lat Pointer to already-allocated array of float for lat
+ * data, or NULL if struct reads are being done.
+ * @param lon Pointer to already-allocated array of float for lon
+ * data, or NULL if struct reads are being done.
+ * @param energy Pointer to already-allocated array of float for
+ * energy data, or NULL if struct reads are being done.
+ * @param parent_group_id Pointer to already-allocated array of int
+ * for parent_group_id data, or NULL if struct reads are being done.
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
 */
 static int
-read_event_vars(int ncid, int nevents, GLM_EVENT_T *event, int *event_id)
+read_event_vars(int ncid, int nevents, GLM_EVENT_T *event, int *event_id,
+                unsigned int *time_offset, float *lat, float *lon,
+                float *energy, int *parent_group_id)
 {
     /* Event varids. */
     int event_id_varid;
@@ -159,22 +171,38 @@ read_event_vars(int ncid, int nevents, GLM_EVENT_T *event, int *event_id)
      * GLM_EVENT. */
     for (i = 0; i < nevents; i++)
     {
+        unsigned int my_time_offset;
+        float my_lat;
+        float my_lon;
+        float my_energy;
+
+        /* Unpack some values. */
+        my_time_offset = (float)((unsigned short)event_time_offset[i]) *
+            (unsigned short)event_time_offset_scale + (unsigned short)event_time_offset_offset;
+        my_lat = (float)((unsigned short)event_lat[i]) *
+            (unsigned short)event_lat_scale + (unsigned short)event_lat_offset;
+        my_lon = (float)((unsigned short)event_lon[i]) *
+            (unsigned short)event_lon_scale + (unsigned short)event_lon_offset;
+        my_energy = (float)((unsigned short)event_energy[i]) *
+            (unsigned short)event_energy_scale + (unsigned short)event_energy_offset;
+
         if (event) /* fill structs */
         {
             event[i].id = my_event_id[i];
-            event[i].time_offset = (float)((unsigned short)event_time_offset[i]) *
-                (unsigned short)event_time_offset_scale + (unsigned short)event_time_offset_offset;
-            event[i].lat = (float)((unsigned short)event_lat[i]) *
-                (unsigned short)event_lat_scale + (unsigned short)event_lat_offset;
-            event[i].lon = (float)((unsigned short)event_lon[i]) *
-                (unsigned short)event_lon_scale + (unsigned short)event_lon_offset;
-            event[i].energy = (float)((unsigned short)event_energy[i]) *
-                (unsigned short)event_energy_scale + (unsigned short)event_energy_offset;
+            event[i].time_offset = my_time_offset;
+            event[i].lat = my_lat;
+            event[i].lon = my_lon;
+            event[i].energy = my_energy;
             event[i].parent_group_id = event_parent_group_id[i];
         }
         else /* fill arrays */
         {
             event_id[i] = my_event_id[i];
+            time_offset[i] = my_time_offset;
+            lat[i] = my_lat;
+            lon[i] = my_lon;
+            energy[i] = my_energy;
+            parent_group_id[i] = event_parent_group_id[i];
         }
     }
 
@@ -211,7 +239,8 @@ glm_read_event_structs(int ncid, int nevents, GLM_EVENT_T *event)
 {
     int ret;
     
-    if ((ret = read_event_vars(ncid, nevents, event, NULL)))
+    if ((ret = read_event_vars(ncid, nevents, event, NULL, NULL,
+                               NULL, NULL, NULL, NULL)))
 	return ret;
     
     return 0;
@@ -230,11 +259,14 @@ glm_read_event_structs(int ncid, int nevents, GLM_EVENT_T *event)
  * @author Ed Hartnett
 */
 int
-glm_read_event_arrays(int ncid, int nevents, int *event_id)
+glm_read_event_arrays(int ncid, int nevents, int *event_id,
+                      unsigned int *time_offset, float *lat, float *lon,
+                      float *energy, int *parent_group_id)
 {
     int ret;
 
-    if ((ret = read_event_vars(ncid, nevents, NULL, event_id)))
+    if ((ret = read_event_vars(ncid, nevents, NULL, event_id,
+                               time_offset, lat, lon, energy, parent_group_id)))
 	return ret;
 
     return 0;
@@ -979,10 +1011,19 @@ glm_read_file_arrays(char *file_name, int verbose)
 
     size_t nevents, ngroups, nflashes;
 
-    /* Arrays of events, groups, flashes. */
+    /* Arrays for event data. */
     int *event_id;
+    unsigned int *time_offset;
+    float *lat, *lon, *energy;
+    int *parent_group_id;
+
+    /* Arrays for group data. */
     GLM_GROUP_T *group;
+
+    /* Arrays for flash data. */
     GLM_FLASH_T *flash;
+
+    /* Scalar data. */
     GLM_SCALAR_T glm_scalar;
 
     int ret;
@@ -1012,16 +1053,31 @@ glm_read_file_arrays(char *file_name, int verbose)
 	printf("nflashes %zu ngroups %zu nevents %zu\n", nflashes,
 	       ngroups, nevents);
 
-    /* Allocate storage. */
+    /* Allocate storage for event arrays. */
     if (!(event_id = malloc(nevents * sizeof(int))))
 	return GLM_ERR_MEMORY;
+    if (!(time_offset = malloc(nevents * sizeof(unsigned int))))
+	return GLM_ERR_MEMORY;
+    if (!(lat = malloc(nevents * sizeof(float))))
+	return GLM_ERR_MEMORY;
+    if (!(lon = malloc(nevents * sizeof(float))))
+	return GLM_ERR_MEMORY;
+    if (!(energy = malloc(nevents * sizeof(float))))
+	return GLM_ERR_MEMORY;
+    if (!(parent_group_id = malloc(nevents * sizeof(int))))
+	return GLM_ERR_MEMORY;
+
+    /* Allocate storage for group arrays. */
     if (!(group = malloc(ngroups * sizeof(GLM_GROUP_T))))
 	return GLM_ERR_MEMORY;
+
+    /* Allocate storage for flash arrays. */
     if (!(flash = malloc(nflashes * sizeof(GLM_FLASH_T))))
 	return GLM_ERR_MEMORY;
 
     /* Read the vars. */
-    if ((ret = glm_read_event_arrays(ncid, nevents, event_id)))
+    if ((ret = glm_read_event_arrays(ncid, nevents, event_id, time_offset,
+                                     lat, lon, energy, parent_group_id)))
 	return GLM_ERR_MEMORY;
     if ((ret = read_group_vars(ncid, ngroups, group)))
 	return GLM_ERR_MEMORY;
