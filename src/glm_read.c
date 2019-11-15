@@ -254,6 +254,16 @@ glm_read_event_structs(int ncid, int nevents, GLM_EVENT_T *event)
  * @param nevents The number of events.
  * @param event_id Pointer to already-allocated arrat of int for
  * event_id values.
+ * @param time_offset Pointer to already-allocated array of unsigned
+ * int for time_offset data, or NULL if struct reads are being done.
+ * @param lat Pointer to already-allocated array of float for lat
+ * data, or NULL if struct reads are being done.
+ * @param lon Pointer to already-allocated array of float for lon
+ * data, or NULL if struct reads are being done.
+ * @param energy Pointer to already-allocated array of float for
+ * energy data, or NULL if struct reads are being done.
+ * @param parent_group_id Pointer to already-allocated array of int
+ * for parent_group_id data, or NULL if struct reads are being done.
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
@@ -265,26 +275,31 @@ glm_read_event_arrays(int ncid, int nevents, int *event_id,
 {
     int ret;
 
-    if ((ret = read_event_vars(ncid, nevents, NULL, event_id,
-                               time_offset, lat, lon, energy, parent_group_id)))
+    if ((ret = read_event_vars(ncid, nevents, NULL, event_id, time_offset,
+                               lat, lon, energy, parent_group_id)))
 	return ret;
 
     return 0;
 }
 
 /**
- * Read and unpack all the group data in the file. It will be loaded
- * into the pre-allocated array of struct group.
+ * This internal function will read and unpack all the group data in
+ * the file. It will be loaded into either pre-allocated array of struct
+ * group, or arrays of pre-allocated storage for each group var.
  *
  * @param ncid ID of already opened GLM file.
  * @param ngroups The number of groups.
- * @param group Pointer to already-allocated arrat of GLM_GROUP_T.
+ * @param group Pointer to already-allocated arrat of GLM_GROUP_T, or
+ * NULL if arrays are being read.
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
 */
-int
-read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group)
+static int
+read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group,
+                unsigned int *time_offset, float *lat, float *lon,
+                float *energy, float *area, unsigned int *parent_flash_id,
+                short *quality_flag)
 {
     /* Groups. */
     int group_id_varid, group_time_offset_varid;
@@ -436,18 +451,49 @@ read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group)
 }
 
 /**
+ * Read and unpack all the group data in the file. It will be loaded
+ * into the pre-allocated array of struct group.
+ *
+ * @param ncid ID of already opened GLM file.
+ * @param ngroups The number of groups.
+ * @param group Pointer to already-allocated arrat of GLM_GROUP_T.
+ *
+ * @return 0 for success, error code otherwise.
+ * @author Ed Hartnett
+*/
+int
+glm_read_group_structs(int ncid, int ngroups, GLM_GROUP_T *group)
+{
+    int ret;
+
+    if ((ret = read_group_vars(ncid, ngroups, group, NULL, NULL,
+                               NULL, NULL, NULL, NULL, NULL)))
+	return ret;
+
+    return 0;
+}
+
+/**
  * Read and unpack all the flash data in the file. It will be loaded
  * into the pre-allocated array of struct flash.
  *
  * @param ncid ID of already opened GLM file.
  * @param nflashes The number of flashes.
- * @param flash Pointer to already-allocated arrat of GLM_FLASH_T.
+ * @param flash Pointer to already-allocated arrat of GLM_FLASH_T, or
+ * NULL if arrays are to be read.
+ *
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
  */
-int
-read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash)
+static int
+read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash,
+                unsigned int *time_offset_of_first_event,
+                unsigned int *time_offset_of_last_event,
+                unsigned int *frame_time_offset_of_first_event,
+                unsigned int *frame_time_offset_of_last_event,
+                float *lat, float *lon, float *area, float *energy,
+                short *quality_flag)
 {
     /* Flashes. Note that event_id and group_id are int, but flash_id
      * is short. */
@@ -635,6 +681,29 @@ read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash)
 	free(flash_energy);
     if (flash_quality_flag)
 	free(flash_quality_flag);
+
+    return 0;
+}
+
+/**
+ * Read and unpack all the flash data in the file. It will be loaded
+ * into the pre-allocated array of struct flash.
+ *
+ * @param ncid ID of already opened GLM file.
+ * @param nflashs The number of flashs.
+ * @param flash Pointer to already-allocated arrat of GLM_FLASH_T.
+ *
+ * @return 0 for success, error code otherwise.
+ * @author Ed Hartnett
+*/
+int
+glm_read_flash_structs(int ncid, int nflashs, GLM_FLASH_T *flash)
+{
+    int ret;
+
+    if ((ret = read_flash_vars(ncid, nflashs, flash, NULL, NULL,
+                               NULL, NULL, NULL, NULL, NULL, NULL, NULL)))
+	return ret;
 
     return 0;
 }
@@ -976,9 +1045,9 @@ glm_read_file(char *file_name, int verbose)
     /* Read the vars. */
     if ((ret = glm_read_event_structs(ncid, nevents, event)))
 	return GLM_ERR_MEMORY;
-    if ((ret = read_group_vars(ncid, ngroups, group)))
+    if ((ret = glm_read_group_structs(ncid, ngroups, group)))
 	return GLM_ERR_MEMORY;
-    if ((ret = read_flash_vars(ncid, nflashes, flash)))
+    if ((ret = glm_read_flash_structs(ncid, nflashes, flash)))
 	return GLM_ERR_MEMORY;
     if ((ret = read_scalars(ncid, &glm_scalar)))
 	return GLM_ERR_MEMORY;
@@ -1079,10 +1148,10 @@ glm_read_file_arrays(char *file_name, int verbose)
     if ((ret = glm_read_event_arrays(ncid, nevents, event_id, time_offset,
                                      lat, lon, energy, parent_group_id)))
 	return GLM_ERR_MEMORY;
-    if ((ret = read_group_vars(ncid, ngroups, group)))
-	return GLM_ERR_MEMORY;
-    if ((ret = read_flash_vars(ncid, nflashes, flash)))
-	return GLM_ERR_MEMORY;
+    /* if ((ret = read_group_vars(ncid, ngroups, group))) */
+    /*     return GLM_ERR_MEMORY; */
+    /* if ((ret = read_flash_vars(ncid, nflashes, flash))) */
+    /*     return GLM_ERR_MEMORY; */
     if ((ret = read_scalars(ncid, &glm_scalar)))
 	return GLM_ERR_MEMORY;
 

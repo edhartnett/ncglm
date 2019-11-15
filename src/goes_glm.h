@@ -28,8 +28,8 @@ extern "C" {
 
     int show_att(int ncid, int varid, char *name);
     int glm_read_event_vars(int ncid, int nevents, GLM_EVENT_T *event);
-    int read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group);
-    int read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash);
+    int glm_read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group);
+    int glm_read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash);
     int read_dims(int ncid, size_t *nevents, size_t *ngroups, size_t *nflashes);
     int read_scalars(int ncid, GLM_SCALAR_T *glm_scalar);
     int glm_read_file(char *file_name, int verbose);
