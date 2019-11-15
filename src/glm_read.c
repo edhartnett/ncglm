@@ -291,6 +291,20 @@ glm_read_event_arrays(int ncid, int nevents, int *event_id,
  * @param ngroups The number of groups.
  * @param group Pointer to already-allocated arrat of GLM_GROUP_T, or
  * NULL if arrays are being read.
+ * @param time_offset Pointer to already-allocated array of unsigned
+ * int for time_offset data, or NULL if struct reads are being done.
+ * @param lat Pointer to already-allocated array of float for lat
+ * data, or NULL if struct reads are being done.
+ * @param lon Pointer to already-allocated array of float for lon
+ * data, or NULL if struct reads are being done.
+ * @param energy Pointer to already-allocated array of float for
+ * energy data, or NULL if struct reads are being done.
+ * @param area Pointer to already-allocated array of float for
+ * area data, or NULL if struct reads are being done.
+ * @param parent_flash_id Pointer to already-allocated array of int
+ * for parent_flash_id data, or NULL if struct reads are being done.
+ * @param quality_flag Pointer to already-allocated array of short
+ * for quality flag data, or NULL if struct reads are being done.
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
@@ -474,6 +488,44 @@ glm_read_group_structs(int ncid, int ngroups, GLM_GROUP_T *group)
 }
 
 /**
+ * Read and unpack all the group data in the file. It will be loaded
+ * into the pre-allocated arrays for each element of the group data.
+ *
+ * @param ncid ID of already opened GLM file.
+ * @param ngroups The number of groups.
+ * @param time_offset Pointer to already-allocated array of unsigned
+ * int for time_offset data, or NULL if struct reads are being done.
+ * @param lat Pointer to already-allocated array of float for lat
+ * data, or NULL if struct reads are being done.
+ * @param lon Pointer to already-allocated array of float for lon
+ * data, or NULL if struct reads are being done.
+ * @param energy Pointer to already-allocated array of float for
+ * energy data, or NULL if struct reads are being done.
+ * @param area Pointer to already-allocated array of float for
+ * area data, or NULL if struct reads are being done.
+ * @param parent_flash_id Pointer to already-allocated array of int
+ * for parent_flash_id data, or NULL if struct reads are being done.
+ * @param quality_flag Pointer to already-allocated array of short
+ * for quality flag data, or NULL if struct reads are being done.
+ *
+ * @return 0 for success, error code otherwise.
+ * @author Ed Hartnett
+*/
+int
+glm_read_group_arrays(int ncid, int ngroups, unsigned int *time_offset,
+                      float *lat, float *lon, float *energy, float *area,
+                      unsigned int *parent_flash_id, short *quality_flag)
+{
+    int ret;
+
+    if ((ret = read_group_vars(ncid, ngroups, NULL, time_offset, lat,
+                               lon, energy, area, parent_flash_id, quality_flag)))
+	return ret;
+
+    return 0;
+}
+
+/**
  * Read and unpack all the flash data in the file. It will be loaded
  * into the pre-allocated array of struct flash.
  *
@@ -481,6 +533,29 @@ glm_read_group_structs(int ncid, int ngroups, GLM_GROUP_T *group)
  * @param nflashes The number of flashes.
  * @param flash Pointer to already-allocated arrat of GLM_FLASH_T, or
  * NULL if arrays are to be read.
+ * @param time_offset_of_first_event Pointer to already-allocated
+ * array of unsigned int for time_offset_of_first_event data, or NULL
+ * if struct reads are being done.
+ * @param time_offset_of_last_event Pointer to already-allocated
+ * array of unsigned int for time_offset_of_last_event data, or NULL
+ * if struct reads are being done.
+ * @param frame_time_offset_of_first_event Pointer to
+ * already-allocated array of unsigned int for
+ * frame_time_offset_of_first_event data, or NULL if struct reads are
+ * being done.
+ * @param frame_time_offset_of_last_event Pointer to already-allocated
+ * array of unsigned int for frame_time_offset_of_last_event data, or
+ * NULL if struct reads are being done.
+ * @param lat Pointer to already-allocated array of float for lat
+ * data, or NULL if struct reads are being done.
+ * @param lon Pointer to already-allocated array of float for lon
+ * data, or NULL if struct reads are being done.
+ * @param area Pointer to already-allocated array of float for
+ * area data, or NULL if struct reads are being done.
+ * @param energy Pointer to already-allocated array of float for
+ * energy data, or NULL if struct reads are being done.
+ * @param quality_flag Pointer to already-allocated array of short
+ * for quality flag data, or NULL if struct reads are being done.
  *
  *
  * @return 0 for success, error code otherwise.
@@ -687,7 +762,7 @@ read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash,
 
 /**
  * Read and unpack all the flash data in the file. It will be loaded
- * into the pre-allocated array of struct flash.
+ * into the pre-allocated array of struct GLM_FLASH_T.
  *
  * @param ncid ID of already opened GLM file.
  * @param nflashs The number of flashs.
@@ -703,6 +778,36 @@ glm_read_flash_structs(int ncid, int nflashs, GLM_FLASH_T *flash)
 
     if ((ret = read_flash_vars(ncid, nflashs, flash, NULL, NULL,
                                NULL, NULL, NULL, NULL, NULL, NULL, NULL)))
+	return ret;
+
+    return 0;
+}
+
+/**
+ * Read and unpack all the flash data in the file. It will be loaded
+ * into the pre-allocated array of struct GLM_FLASH_T.
+ *
+ * @param ncid ID of already opened GLM file.
+ * @param nflashs The number of flashs.
+ *
+ * @return 0 for success, error code otherwise.
+ * @author Ed Hartnett
+*/
+int
+glm_read_flash_arrays(int ncid, int nflashs,
+                      unsigned int *time_offset_of_first_event,
+                      unsigned int *time_offset_of_last_event,
+                      unsigned int *frame_time_offset_of_first_event,
+                      unsigned int *frame_time_offset_of_last_event,
+                      float *lat, float *lon, float *area, float *energy,
+                      short *quality_flag)
+{
+    int ret;
+
+    if ((ret = read_flash_vars(ncid, nflashs, NULL, time_offset_of_first_event,
+                               time_offset_of_last_event, frame_time_offset_of_first_event,
+                               frame_time_offset_of_last_event, lat, lon, area,
+                               energy, quality_flag)))
 	return ret;
 
     return 0;
