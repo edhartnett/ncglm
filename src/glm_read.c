@@ -1121,15 +1121,15 @@ glm_read_file(char *file_name, int verbose)
     /* Optionally display some of the global attributes. The GLM data
      * files comply with the CF Conventions, and other metadata
      * standards. */
-    if (verbose)
-    {
-	if (show_att(ncid, NC_GLOBAL, TITLE))
-	    return GLM_ERR_MEMORY;
-	if (show_att(ncid, NC_GLOBAL, PLATFORM_ID))
-	    return GLM_ERR_MEMORY;
-	if (show_att(ncid, NC_GLOBAL, SUMMARY))
-	    return GLM_ERR_MEMORY;
-    }
+    /* if (verbose) */
+    /* { */
+    /*     if (show_att(ncid, NC_GLOBAL, TITLE)) */
+    /*         return GLM_ERR_MEMORY; */
+    /*     if (show_att(ncid, NC_GLOBAL, PLATFORM_ID)) */
+    /*         return GLM_ERR_MEMORY; */
+    /*     if (show_att(ncid, NC_GLOBAL, SUMMARY)) */
+    /*         return GLM_ERR_MEMORY; */
+    /* } */
 
     /* Read the size of the dimensions. */
     if ((ret = read_dims(ncid, &nevents, &ngroups, &nflashes)))
@@ -1205,19 +1205,6 @@ glm_read_file_arrays(char *file_name, int verbose)
     /* Open the data file as read-only. */
     if ((ret = nc_open(file_name, NC_NOWRITE, &ncid)))
 	NC_ERR(ret);
-
-    /* Optionally display some of the global attributes. The GLM data
-     * files comply with the CF Conventions, and other metadata
-     * standards. */
-    if (verbose)
-    {
-	if (show_att(ncid, NC_GLOBAL, TITLE))
-	    return GLM_ERR_MEMORY;
-	if (show_att(ncid, NC_GLOBAL, PLATFORM_ID))
-	    return GLM_ERR_MEMORY;
-	if (show_att(ncid, NC_GLOBAL, SUMMARY))
-	    return GLM_ERR_MEMORY;
-    }
 
     /* Read the size of the dimensions. */
     if ((ret = read_dims(ncid, &nevents, &ngroups, &nflashes)))

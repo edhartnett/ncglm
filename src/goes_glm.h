@@ -27,6 +27,7 @@
 extern "C" {
 #endif
 
+    int read_dims(int ncid, size_t *nevents, size_t *ngroups, size_t *nflashes);
     int show_att(int ncid, int varid, char *name);
 
     int glm_read_event_structs(int ncid, int nevents, GLM_EVENT_T *event);
@@ -46,7 +47,6 @@ extern "C" {
                               float *lat, float *lon, float *area, float *energy,
                               short *quality_flag);
 
-    int read_dims(int ncid, size_t *nevents, size_t *ngroups, size_t *nflashes);
     int read_scalars(int ncid, GLM_SCALAR_T *glm_scalar);
 
     int glm_read_file(char *file_name, int verbose);
