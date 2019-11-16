@@ -7,7 +7,7 @@
 # This is a libtool library.
 lib_LTLIBRARIES = libncglm.la
 libncglm_la_LDFLAGS = -version-info 0:0:0
-libncglm_la_SOURCES = glm_read.c goes_glm.h glm_data.h
+libncglm_la_SOURCES = glm_read.c glm_events.c goes_glm.h glm_data.h
 
 # Include cmake build system.
 EXTRA_DIST = CMakeLists.txt

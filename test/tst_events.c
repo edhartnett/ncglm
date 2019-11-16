@@ -24,6 +24,7 @@ main()
     {
         int ncid;
         size_t nevents, ngroups, nflashes;
+        GLM_EVENT_T *event;
         int ret;
 
         /* Open the data file as read-only. */
@@ -33,6 +34,15 @@ main()
         /* Check number of events, groups, and flashes. */
         if ((ret = read_dims(ncid, &nevents, &ngroups, &nflashes))) ERR;
         if (nevents != 4578 || ngroups != 1609 || nflashes != 123) ERR;
+
+        /* Allocat array of struct to hold data. */
+        if (!(event = malloc(nevents * sizeof(GLM_EVENT_T)))) ERR;
+
+        /* Read data. */
+        if (glm_read_event_structs(ncid, nevents, event)) ERR;
+
+        /* Free resources. */
+        free(event);
 
         /* Close the data file. */
         if ((ret = nc_close(ncid)))
