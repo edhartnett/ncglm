@@ -32,15 +32,15 @@
  * Read the dimensions.
  *
  * @param ncid ID of already opened GLM file.
- * @param nevents The number of events.
- * @param ngroups The number of groups.
- * @param nflashes The number of flashes.
+ * @param nevent Pointer that gets the number of events. Ignored if NULL.
+ * @param ngroup Pointer that gets the number of groups. Ignored if NULL.
+ * @param nflash Pointer that gets the number of flashes. Ignored if NULL.
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
  */
 int
-read_dims(int ncid, size_t *nevents, size_t *ngroups, size_t *nflashes)
+read_dims(int ncid, size_t *nevent, size_t *ngroup, size_t *nflash)
 {
     /* Dimensions and their lengths. */
     int event_dimid, group_dimid, flash_dimid;
@@ -51,22 +51,31 @@ read_dims(int ncid, size_t *nevents, size_t *ngroups, size_t *nflashes)
     int ret;
 
     /* Check inputs. */
-    assert(ncid > 0 && nevents && ngroups && nflashes);
+    assert(ncid > 0);
 
-    if ((ret = nc_inq_dimid(ncid, NUMBER_OF_FLASHES, &flash_dimid)))
-	NC_ERR(ret);
-    if ((ret = nc_inq_dimlen(ncid, flash_dimid, nflashes)))
-	NC_ERR(ret);
-    
-    if ((ret = nc_inq_dimid(ncid, NUMBER_OF_GROUPS, &group_dimid)))
-	NC_ERR(ret);
-    if ((ret = nc_inq_dimlen(ncid, group_dimid, ngroups)))
-	NC_ERR(ret);
+    if (nflash)
+    {
+        if ((ret = nc_inq_dimid(ncid, NUMBER_OF_FLASHES, &flash_dimid)))
+            NC_ERR(ret);
+        if ((ret = nc_inq_dimlen(ncid, flash_dimid, nflash)))
+            NC_ERR(ret);
+    }
 
-    if ((ret = nc_inq_dimid(ncid, NUMBER_OF_EVENTS, &event_dimid)))
-	NC_ERR(ret);
-    if ((ret = nc_inq_dimlen(ncid, event_dimid, nevents)))
-	NC_ERR(ret);
+    if (ngroup)
+    {
+        if ((ret = nc_inq_dimid(ncid, NUMBER_OF_GROUPS, &group_dimid)))
+            NC_ERR(ret);
+        if ((ret = nc_inq_dimlen(ncid, group_dimid, ngroup)))
+            NC_ERR(ret);
+    }
+
+    if (nevent)
+    {
+        if ((ret = nc_inq_dimid(ncid, NUMBER_OF_EVENTS, &event_dimid)))
+            NC_ERR(ret);
+        if ((ret = nc_inq_dimlen(ncid, event_dimid, nevent)))
+            NC_ERR(ret);
+    }
 
     /* This dimension will always be length 2. */
     if ((ret = nc_inq_dimid(ncid, NUMBER_OF_TIME_BOUNDS, &number_of_time_bounds_dimid)))
