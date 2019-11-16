@@ -32,7 +32,7 @@ main()
             NC_ERR(ret);
 
         /* Check number of events, groups, and flashes. */
-        if ((ret = read_dims(ncid, &nevents, &ngroups, &nflashes))) ERR;
+        if ((ret = glm_read_dims(ncid, &nevents, &ngroups, &nflashes))) ERR;
         if (nevents != 4578 || ngroups != 1609 || nflashes != 123) ERR;
 
         /* Allocat array of struct to hold data. */

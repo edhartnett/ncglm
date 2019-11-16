@@ -27,8 +27,8 @@
 extern "C" {
 #endif
 
-    int read_dims(int ncid, size_t *nevents, size_t *ngroups, size_t *nflashes);
-    int show_att(int ncid, int varid, char *name);
+    int glm_read_dims(int ncid, size_t *nevent, size_t *ngroup, size_t *nflash);
+    /* int show_att(int ncid, int varid, char *name); */
 
     int glm_read_event_structs(int ncid, int nevents, GLM_EVENT_T *event);
     int glm_read_group_structs(int ncid, int ngroups, GLM_GROUP_T *group);

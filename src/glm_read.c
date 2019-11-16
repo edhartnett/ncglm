@@ -40,7 +40,7 @@
  * @author Ed Hartnett
  */
 int
-read_dims(int ncid, size_t *nevent, size_t *ngroup, size_t *nflash)
+glm_read_dims(int ncid, size_t *nevent, size_t *ngroup, size_t *nflash)
 {
     /* Dimensions and their lengths. */
     int event_dimid, group_dimid, flash_dimid;
@@ -356,7 +356,7 @@ glm_read_file(char *file_name, int verbose)
     /* } */
 
     /* Read the size of the dimensions. */
-    if ((ret = read_dims(ncid, &nevents, &ngroups, &nflashes)))
+    if ((ret = glm_read_dims(ncid, &nevents, &ngroups, &nflashes)))
 	return GLM_ERR_MEMORY;
     
     if (verbose)
@@ -431,7 +431,7 @@ glm_read_file_arrays(char *file_name, int verbose)
 	NC_ERR(ret);
 
     /* Read the size of the dimensions. */
-    if ((ret = read_dims(ncid, &nevents, &ngroups, &nflashes)))
+    if ((ret = glm_read_dims(ncid, &nevents, &ngroups, &nflashes)))
 	return GLM_ERR_MEMORY;
     
     if (verbose)
