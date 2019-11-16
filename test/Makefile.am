@@ -17,9 +17,11 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 AM_LDFLAGS = ${top_builddir}/src/libncglm.la
 LDADD = ${top_builddir}/src/libncglm.la
 
-# Build our test program.
-check_PROGRAMS = tst_glm_read tst_glm_read_arrays tst_glm_ncgen_write	\
+GLM_TESTS = tst_glm_read tst_glm_read_arrays tst_glm_ncgen_write	\
 tst_events
+
+# Build our test program.
+check_PROGRAMS = ${GLM_TESTS}
 
 # Source code for the tests.
 tst_glm_read_SOURCES = tst_glm_read.c un_test.h tst_utils.c
@@ -27,10 +29,11 @@ tst_glm_read_arrays_SOURCES = tst_glm_read_arrays.c un_test.h tst_utils.c
 tst_events_SOURCES = tst_events.c un_test.h
 
 # Run our test program.
-TESTS = run_glm_tests.sh 
+TESTS = ${GLM_TESTS}
 
 # Make sure these files are included in distribution.
-EXTRA_DIST = run_glm_tests.sh CMakeLists.txt
+EXTRA_DIST = CMakeLists.txt						\
+OR_GLM-L2-LCFA_G17_s20192692359400_e20192700000000_c20192700000028.nc
 
 # Clean data files for distclean target.
 DISTCLEANFILES = *.nc
