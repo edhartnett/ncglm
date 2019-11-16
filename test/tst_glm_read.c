@@ -14,8 +14,6 @@
 #include <time.h>
 #include <sys/time.h> /* Extra high precision time info. */
 #include <math.h>
-#include <assert.h>
-#include <netcdf.h>
 #include "un_test.h"
 #include "goes_glm.h"
 

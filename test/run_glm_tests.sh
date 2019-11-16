@@ -17,4 +17,4 @@ done
 # Run the test.
 ./tst_glm_read -v
 ./tst_glm_read_arrays -v
-
+./tst_events

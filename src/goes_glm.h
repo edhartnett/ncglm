@@ -7,6 +7,7 @@
 #ifndef _GOES_GLM_H
 #define _GOES_GLM_H
 
+#include <netcdf.h>
 #include "glm_data.h"
 
 #define GLM_ERR_TIMER 99

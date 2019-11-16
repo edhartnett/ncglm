@@ -7,6 +7,8 @@
 #ifndef _UN_TEST_H
 #define _UN_TEST_H
 
+#include <assert.h>
+
 #define MILLION 1000000
 
 /* This macro prints an error message with line number and name of
