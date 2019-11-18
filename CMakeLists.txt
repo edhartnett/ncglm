@@ -20,6 +20,7 @@ SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/"
 
 # Find netCDF.
 include(FindNetCDF)
+#find_package (NetCDF REQUIRED)
 
 include_directories("${NETCDF_INCLUDES}")
 
