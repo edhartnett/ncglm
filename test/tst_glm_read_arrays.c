@@ -49,7 +49,7 @@ show_att(int ncid, int varid, char *name)
 
     /* Allocate storage. Add 1 for the C null terminator. */
     if (!(value = malloc((att_len + 1) * sizeof(char))))
-	ERR;
+	ERR2;
 
     /* Read the attribute value. */
     if ((ret = nc_get_att_text(ncid, varid, name, value)))
@@ -120,15 +120,15 @@ main(int argc, char **argv)
 	
 	/* Start timer. */
 	if (gettimeofday(&start_time, NULL))
-	    ERR;
+	    ERR2;
 
 	/* Read file. */
 	if (glm_read_file_arrays(new_file, verbose))
-	    ERR;
+	    ERR2;
 
 	/* Handle timing. */
-	if (gettimeofday(&end_time, NULL)) ERR;
-	if (un_timeval_subtract(&diff_time, &end_time, &start_time)) ERR;
+	if (gettimeofday(&end_time, NULL)) ERR2;
+	if (un_timeval_subtract(&diff_time, &end_time, &start_time)) ERR2;
 	meta_read_us = (int)diff_time.tv_sec * MILLION + (int)diff_time.tv_usec;
 	if (meta_read_us > meta_max_read_us)
 	    meta_max_read_us = meta_read_us;

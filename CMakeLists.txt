@@ -20,8 +20,15 @@ SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/"
 
 # Find netCDF.
 include(FindNetCDF)
+#find_package (NetCDF REQUIRED)
 
 include_directories("${NETCDF_INCLUDES}")
+
+MACRO(add_sh_test prefix F)
+  IF(HAVE_BASH)
+    ADD_TEST(${prefix}_${F} bash "-c" "export srcdir=${CMAKE_CURRENT_SOURCE_DIR};export TOPSRCDIR=${CMAKE_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR}/${F}.sh")
+  ENDIF()
+ENDMACRO()
 
 # Create a config.h.
 configure_file(config.h.cmake.in config.h)
@@ -31,4 +38,5 @@ enable_testing()
 include(CTest)
 
 # Build in this subdirectory.
-add_subdirectory(src test)
+add_subdirectory(src)
+add_subdirectory(test)

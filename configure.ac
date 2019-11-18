@@ -70,9 +70,13 @@ dnl AC_SEARCH_LIBS([nf_create], [netcdff], [],
 dnl                             [AC_MSG_ERROR([Can't find or link to the netcdf Fortran library, set CPPFLAGS/LDFLAGS.])])
 dnl AC_LANG_POP(Fortran)
 
+# Make sure the test data file is available in vpath builds.
+AC_CONFIG_LINKS([test/OR_GLM-L2-LCFA_G17_s20192692359400_e20192700000000_c20192700000028.nc:test/OR_GLM-L2-LCFA_G17_s20192692359400_e20192700000000_c20192700000028.nc])
+
 # These files will be created when the configure script is run.
 AC_CONFIG_FILES([Makefile
 	cmake/Makefile
+        include/Makefile
         src/Makefile
 	test/Makefile
 	docs/Makefile
