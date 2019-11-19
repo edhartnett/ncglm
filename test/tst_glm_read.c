@@ -13,7 +13,7 @@
 #include <sys/time.h> /* Extra high precision time info. */
 #include <math.h>
 #include "un_test.h"
-#include "goes_glm.h"
+#include "ncglm.h"
 
 /* Attribute names. */
 #define TITLE "title"

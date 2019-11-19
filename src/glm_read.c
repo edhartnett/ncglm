@@ -14,7 +14,7 @@
 #include <math.h>
 #include <assert.h>
 #include <netcdf.h>
-#include "goes_glm.h"
+#include "ncglm.h"
 
 /** Name of title attribute. */
 #define TITLE "title"
@@ -329,6 +329,7 @@ glm_read_file(char *file_name, int verbose)
     int ncid;
 
     size_t nevents, ngroups, nflashes;
+    size_t my_nevent;
 
     /* Structs of events, groups, flashes. */
     GLM_EVENT_T *event;
@@ -372,7 +373,7 @@ glm_read_file(char *file_name, int verbose)
 	return GLM_ERR_MEMORY;
 
     /* Read the vars. */
-    if ((ret = glm_read_event_structs(ncid, nevents, event)))
+    if ((ret = glm_read_event_structs(ncid, &my_nevent, event)))
 	return GLM_ERR_MEMORY;
     if ((ret = glm_read_group_structs(ncid, ngroups, group)))
 	return GLM_ERR_MEMORY;
@@ -408,6 +409,7 @@ glm_read_file_arrays(char *file_name, int verbose)
     int ncid;
 
     size_t nevents, ngroups, nflashes;
+    size_t my_nevent;
 
     /* Arrays for event data. */
     int *event_id;
@@ -461,7 +463,7 @@ glm_read_file_arrays(char *file_name, int verbose)
 	return GLM_ERR_MEMORY;
 
     /* Read the vars. */
-    if ((ret = glm_read_event_arrays(ncid, nevents, event_id, time_offset,
+    if ((ret = glm_read_event_arrays(ncid, &my_nevent, event_id, time_offset,
                                      lat, lon, energy, parent_group_id)))
 	return GLM_ERR_MEMORY;
     /* if ((ret = read_group_vars(ncid, ngroups, group))) */

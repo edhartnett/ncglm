@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "goes_glm.h"
+#include "ncglm.h"
 
 /**
  * Read and unpack all the event data in the file. It will be loaded
@@ -57,7 +57,7 @@
  * @author Ed Hartnett
 */
 static int
-read_event_vars(int ncid, int *nevent, GLM_EVENT_T *event, int *event_id,
+read_event_vars(int ncid, size_t *nevent, GLM_EVENT_T *event, int *event_id,
                 unsigned int *time_offset, float *lat, float *lon,
                 float *energy, int *parent_group_id)
 {
@@ -229,7 +229,7 @@ read_event_vars(int ncid, int *nevent, GLM_EVENT_T *event, int *event_id,
  * @author Ed Hartnett
 */
 int
-glm_read_event_structs(int ncid, int *nevent, GLM_EVENT_T *event)
+glm_read_event_structs(int ncid, size_t *nevent, GLM_EVENT_T *event)
 {
     int ret;
 
@@ -264,7 +264,7 @@ glm_read_event_structs(int ncid, int *nevent, GLM_EVENT_T *event)
  * @author Ed Hartnett
 */
 int
-glm_read_event_arrays(int ncid, int *nevent, int *event_id,
+glm_read_event_arrays(int ncid, size_t *nevent, int *event_id,
                       unsigned int *time_offset, float *lat, float *lon,
                       float *energy, int *parent_group_id)
 {
