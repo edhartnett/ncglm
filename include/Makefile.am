@@ -4,7 +4,7 @@
 # Ed Hartnett 11/19/2019
 
 # Install these header files.
-include_HEADERS = glm_data.h goes_glm.h
+include_HEADERS = glm_data.h ncglm.h
 
 # Include cmake build system.
 EXTRA_DIST = CMakeLists.txt

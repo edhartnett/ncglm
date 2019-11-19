@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "goes_glm.h"
+#include "ncglm.h"
 
 /**
  * Read and unpack all the event data in the file. It will be loaded
@@ -36,7 +36,8 @@
  *   the “_Unsigned” attribute.
  *
  * @param ncid ID of already opened GLM file.
- * @param nevents The number of events.
+ * @param nevent A pointer that gets the number of events
+ * read. Ignored if NULL.
  * @param event Pointer to already-allocated arrat of GLM_EVENT_T, or
  * NULL if array reads are being done.
  * @param event_id Pointer to already-allocated array of int for
@@ -56,10 +57,12 @@
  * @author Ed Hartnett
 */
 static int
-read_event_vars(int ncid, int nevents, GLM_EVENT_T *event, int *event_id,
+read_event_vars(int ncid, size_t *nevent, GLM_EVENT_T *event, int *event_id,
                 unsigned int *time_offset, float *lat, float *lon,
                 float *energy, int *parent_group_id)
 {
+    size_t my_nevent;
+
     /* Event varids. */
     int event_id_varid;
     int event_time_offset_varid, event_lat_varid, event_lon_varid;
@@ -82,20 +85,28 @@ read_event_vars(int ncid, int nevents, GLM_EVENT_T *event, int *event_id,
     int ret;
 
     /* Check inputs. */
-    assert(ncid && nevents > 0 && (event || event_id));
+    assert(ncid && (event || event_id));
+
+    /* How many events to read? */
+    if ((ret = glm_read_dims(ncid, &my_nevent, NULL, NULL)))
+        return ret;
+
+    /* Return the number of events to user if desired. */
+    if (nevent)
+        *nevent = my_nevent;
 
     /* Allocate storeage for event variables. */
-    if (!(my_event_id = malloc(nevents * sizeof(int))))
+    if (!(my_event_id = malloc(my_nevent * sizeof(int))))
 	return GLM_ERR_MEMORY;
-    if (!(event_time_offset = malloc(nevents * sizeof(short))))
+    if (!(event_time_offset = malloc(my_nevent * sizeof(short))))
 	return GLM_ERR_TIMER;
-    if (!(event_lat = malloc(nevents * sizeof(short))))
+    if (!(event_lat = malloc(my_nevent * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(event_lon = malloc(nevents * sizeof(short))))
+    if (!(event_lon = malloc(my_nevent * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(event_energy = malloc(nevents * sizeof(short))))
+    if (!(event_energy = malloc(my_nevent * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(event_parent_group_id = malloc(nevents * sizeof(int))))
+    if (!(event_parent_group_id = malloc(my_nevent * sizeof(int))))
 	return GLM_ERR_MEMORY;
 
     /* Find the varids for the event variables. Also get the scale
@@ -151,7 +162,7 @@ read_event_vars(int ncid, int nevents, GLM_EVENT_T *event, int *event_id,
 
     /* Unpack the data into our already-allocated array of struct
      * GLM_EVENT. */
-    for (i = 0; i < nevents; i++)
+    for (i = 0; i < my_nevent; i++)
     {
         unsigned int my_time_offset;
         float my_lat;
@@ -210,18 +221,19 @@ read_event_vars(int ncid, int nevents, GLM_EVENT_T *event, int *event_id,
  * into the pre-allocated array of struct event.
  *
  * @param ncid ID of already opened GLM file.
- * @param nevents The number of events.
+ * @param nevent Pointer that gets the number of events. Ignored if
+ * NULL.
  * @param event Pointer to already-allocated arrat of GLM_EVENT_T.
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
 */
 int
-glm_read_event_structs(int ncid, int nevents, GLM_EVENT_T *event)
+glm_read_event_structs(int ncid, size_t *nevent, GLM_EVENT_T *event)
 {
     int ret;
 
-    if ((ret = read_event_vars(ncid, nevents, event, NULL, NULL,
+    if ((ret = read_event_vars(ncid, nevent, event, NULL, NULL,
                                NULL, NULL, NULL, NULL)))
 	return ret;
 
@@ -233,7 +245,8 @@ glm_read_event_structs(int ncid, int nevents, GLM_EVENT_T *event)
  * into the pre-allocated array of struct event.
  *
  * @param ncid ID of already opened GLM file.
- * @param nevents The number of events.
+ * @param nevent Pointer that gets the number of events. Ignored if
+ * NULL.
  * @param event_id Pointer to already-allocated arrat of int for
  * event_id values.
  * @param time_offset Pointer to already-allocated array of unsigned
@@ -251,13 +264,13 @@ glm_read_event_structs(int ncid, int nevents, GLM_EVENT_T *event)
  * @author Ed Hartnett
 */
 int
-glm_read_event_arrays(int ncid, int nevents, int *event_id,
+glm_read_event_arrays(int ncid, size_t *nevent, int *event_id,
                       unsigned int *time_offset, float *lat, float *lon,
                       float *energy, int *parent_group_id)
 {
     int ret;
 
-    if ((ret = read_event_vars(ncid, nevents, NULL, event_id, time_offset,
+    if ((ret = read_event_vars(ncid, nevent, NULL, event_id, time_offset,
                                lat, lon, energy, parent_group_id)))
 	return ret;
 
