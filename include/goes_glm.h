@@ -30,10 +30,10 @@ extern "C" {
     int glm_read_dims(int ncid, size_t *nevent, size_t *ngroup, size_t *nflash);
     /* int show_att(int ncid, int varid, char *name); */
 
-    int glm_read_event_structs(int ncid, int nevents, GLM_EVENT_T *event);
+    int glm_read_event_structs(int ncid, int *nevent, GLM_EVENT_T *event);
     int glm_read_group_structs(int ncid, int ngroups, GLM_GROUP_T *group);
     int glm_read_flash_structs(int ncid, int nflashes, GLM_FLASH_T *flash);
-    int glm_read_event_arrays(int ncid, int nevents, int *event_id,
+    int glm_read_event_arrays(int ncid, int *nevent, int *event_id,
                               unsigned int *time_offset, float *lat, float *lon,
                               float *energy, int *parent_group_id);
     int glm_read_group_arrays(int ncid, int ngroups, unsigned int *time_offset,
