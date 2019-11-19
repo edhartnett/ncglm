@@ -41,6 +41,7 @@ main()
 
         /* Read data. */
         if (glm_read_event_structs(ncid, &my_nevent, event)) ERR;
+        if (my_nevent != nevent) ERR;
 
         /* Free resources. */
         free(event);
