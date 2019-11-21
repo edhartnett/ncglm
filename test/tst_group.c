@@ -24,6 +24,7 @@ main()
     {
         int ncid;
         size_t nevent, ngroup, nflash;
+        size_t my_ngroup;
         GLM_GROUP_T *group;
         int ret;
 
@@ -39,7 +40,8 @@ main()
         if (!(group = malloc(ngroup * sizeof(GLM_GROUP_T)))) ERR;
 
         /* Read data. */
-        if (glm_read_group_structs(ncid, ngroup, group)) ERR;
+        if (glm_read_group_structs(ncid, &my_ngroup, group)) ERR;
+        if (my_ngroup != ngroup) ERR;
 
         /* Free resources. */
         free(group);
