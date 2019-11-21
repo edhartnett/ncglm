@@ -12,6 +12,7 @@
 
 #define GLM_ERR_TIMER 99
 #define GLM_ERR_MEMORY 100
+#define GLM_ERR_UNEXPECTED 101
 
 /* This macro prints an error message with line number and name of
  * test program, and the netCDF error string. */
@@ -31,15 +32,15 @@ extern "C" {
     /* int show_att(int ncid, int varid, char *name); */
 
     int glm_read_event_structs(int ncid, size_t *nevent, GLM_EVENT_T *event);
-    int glm_read_group_structs(int ncid, int ngroups, GLM_GROUP_T *group);
-    int glm_read_flash_structs(int ncid, int nflashes, GLM_FLASH_T *flash);
+    int glm_read_group_structs(int ncid, size_t *ngroups, GLM_GROUP_T *group);
+    int glm_read_flash_structs(int ncid, size_t *nflashes, GLM_FLASH_T *flash);
     int glm_read_event_arrays(int ncid, size_t *nevent, int *event_id,
                               unsigned int *time_offset, float *lat, float *lon,
                               float *energy, int *parent_group_id);
-    int glm_read_group_arrays(int ncid, int ngroups, unsigned int *time_offset,
+    int glm_read_group_arrays(int ncid, size_t *ngroups, unsigned int *time_offset,
                               float *lat, float *lon, float *energy, float *area,
                               unsigned int *parent_flash_id, short *quality_flag);
-    int glm_read_flash_arrays(int ncid, int nflashs,
+    int glm_read_flash_arrays(int ncid, size_t *nflash,
                               unsigned int *time_offset_of_first_event,
                               unsigned int *time_offset_of_last_event,
                               unsigned int *frame_time_offset_of_first_event,

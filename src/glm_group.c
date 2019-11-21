@@ -16,7 +16,8 @@
  * group, or arrays of pre-allocated storage for each group var.
  *
  * @param ncid ID of already opened GLM file.
- * @param ngroups The number of groups.
+ * @param ngroup A pointer that gets the number of groups. Ignored if
+ * NULL.
  * @param group Pointer to already-allocated arrat of GLM_GROUP_T, or
  * NULL if arrays are being read.
  * @param time_offset Pointer to already-allocated array of unsigned
@@ -38,7 +39,7 @@
  * @author Ed Hartnett
 */
 static int
-read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group,
+read_group_vars(int ncid, size_t *ngroup, GLM_GROUP_T *group,
                 unsigned int *time_offset, float *lat, float *lon,
                 float *energy, float *area, unsigned int *parent_flash_id,
                 short *quality_flag)
@@ -54,6 +55,7 @@ read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group,
     float *group_lat = NULL, *group_lon = NULL;
     short *group_area = NULL, *group_energy = NULL, *group_parent_flash_id = NULL;
     short *group_quality_flag = NULL;
+    size_t my_ngroup;
 
     /* Scale factors and offsets. */
     float group_time_offset_scale, group_time_offset_offset;
@@ -64,24 +66,32 @@ read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group,
     int i;
     int ret;
 
+    /* How many groups to read? */
+    if ((ret = glm_read_dims(ncid, NULL, &my_ngroup, NULL)))
+        return ret;
+
+    /* Return the number of groups to user if desired. */
+    if (ngroup)
+        *ngroup = my_ngroup;
+
     /* Allocate storeage for group variables. */
-    if (!(group_id = malloc(ngroups * sizeof(int))))
+    if (!(group_id = malloc(my_ngroup * sizeof(int))))
 	return GLM_ERR_MEMORY;
-    if (!(group_time_offset = malloc(ngroups * sizeof(short))))
+    if (!(group_time_offset = malloc(my_ngroup * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(group_frame_time_offset = malloc(ngroups * sizeof(short))))
+    if (!(group_frame_time_offset = malloc(my_ngroup * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(group_lat = malloc(ngroups * sizeof(float))))
+    if (!(group_lat = malloc(my_ngroup * sizeof(float))))
 	return GLM_ERR_MEMORY;
-    if (!(group_lon = malloc(ngroups * sizeof(float))))
+    if (!(group_lon = malloc(my_ngroup * sizeof(float))))
 	return GLM_ERR_MEMORY;
-    if (!(group_area = malloc(ngroups * sizeof(short))))
+    if (!(group_area = malloc(my_ngroup * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(group_energy = malloc(ngroups * sizeof(short))))
+    if (!(group_energy = malloc(my_ngroup * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(group_parent_flash_id = malloc(ngroups * sizeof(short))))
+    if (!(group_parent_flash_id = malloc(my_ngroup * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(group_quality_flag = malloc(ngroups * sizeof(short))))
+    if (!(group_quality_flag = malloc(my_ngroup * sizeof(short))))
 	return GLM_ERR_MEMORY;
 
     /* Find the varids for the group variables. */
@@ -154,7 +164,7 @@ read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group,
 
     /* Unpack the data into our already-allocated array of struct
      * GLM_GROUP. */
-    for (i = 0; i < ngroups; i++)
+    for (i = 0; i < my_ngroup; i++)
     {
 	group[i].id = group_id[i];
 	group[i].time_offset = (float)((unsigned short)group_time_offset[i]) *
@@ -197,18 +207,19 @@ read_group_vars(int ncid, int ngroups, GLM_GROUP_T *group,
  * into the pre-allocated array of struct group.
  *
  * @param ncid ID of already opened GLM file.
- * @param ngroups The number of groups.
+ * @param ngroup A pointer that gets the number of groups. Ignored if
+ * NULL.
  * @param group Pointer to already-allocated arrat of GLM_GROUP_T.
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
 */
 int
-glm_read_group_structs(int ncid, int ngroups, GLM_GROUP_T *group)
+glm_read_group_structs(int ncid, size_t *ngroup, GLM_GROUP_T *group)
 {
     int ret;
 
-    if ((ret = read_group_vars(ncid, ngroups, group, NULL, NULL,
+    if ((ret = read_group_vars(ncid, ngroup, group, NULL, NULL,
                                NULL, NULL, NULL, NULL, NULL)))
 	return ret;
 
@@ -220,7 +231,8 @@ glm_read_group_structs(int ncid, int ngroups, GLM_GROUP_T *group)
  * into the pre-allocated arrays for each element of the group data.
  *
  * @param ncid ID of already opened GLM file.
- * @param ngroups The number of groups.
+ * @param ngroup A pointer that gets the number of groups. Ignored if
+ * NULL.
  * @param time_offset Pointer to already-allocated array of unsigned
  * int for time_offset data, or NULL if struct reads are being done.
  * @param lat Pointer to already-allocated array of float for lat
@@ -240,13 +252,13 @@ glm_read_group_structs(int ncid, int ngroups, GLM_GROUP_T *group)
  * @author Ed Hartnett
 */
 int
-glm_read_group_arrays(int ncid, int ngroups, unsigned int *time_offset,
+glm_read_group_arrays(int ncid, size_t *ngroup, unsigned int *time_offset,
                       float *lat, float *lon, float *energy, float *area,
                       unsigned int *parent_flash_id, short *quality_flag)
 {
     int ret;
 
-    if ((ret = read_group_vars(ncid, ngroups, NULL, time_offset, lat,
+    if ((ret = read_group_vars(ncid, ngroup, NULL, time_offset, lat,
                                lon, energy, area, parent_flash_id, quality_flag)))
 	return ret;
 

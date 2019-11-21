@@ -15,7 +15,8 @@
  * into the pre-allocated array of struct flash.
  *
  * @param ncid ID of already opened GLM file.
- * @param nflashes The number of flashes.
+ * @param nflash A pointer that gets the number of flashes. Ignored if
+ * NULL.
  * @param flash Pointer to already-allocated arrat of GLM_FLASH_T, or
  * NULL if arrays are to be read.
  * @param time_offset_of_first_event Pointer to already-allocated
@@ -47,7 +48,7 @@
  * @author Ed Hartnett
  */
 static int
-read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash,
+read_flash_vars(int ncid, size_t *nflash, GLM_FLASH_T *flash,
                 unsigned int *time_offset_of_first_event,
                 unsigned int *time_offset_of_last_event,
                 unsigned int *frame_time_offset_of_first_event,
@@ -73,6 +74,7 @@ read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash,
     float *flash_lat = NULL, *flash_lon = NULL;
     short *flash_area = NULL, *flash_energy = NULL;
     short *flash_quality_flag = NULL;
+    size_t my_nflash;
 
     /* Scale factors and offsets. */
     float flash_time_offset_of_first_event_scale, flash_time_offset_of_first_event_offset;
@@ -85,26 +87,34 @@ read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash,
     int i;
     int ret;
 
+    /* How many flashes to read? */
+    if ((ret = glm_read_dims(ncid, NULL, NULL, &my_nflash)))
+        return ret;
+
+    /* Return the number of flashes to user if desired. */
+    if (nflash)
+        *nflash = my_nflash;
+
     /* Allocate storeage for flash variables. */
-    if (!(flash_id = malloc(nflashes * sizeof(short))))
+    if (!(flash_id = malloc(my_nflash * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(flash_time_offset_of_first_event = malloc(nflashes * sizeof(short))))
+    if (!(flash_time_offset_of_first_event = malloc(my_nflash * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(flash_time_offset_of_last_event = malloc(nflashes * sizeof(short))))
+    if (!(flash_time_offset_of_last_event = malloc(my_nflash * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(flash_frame_time_offset_of_first_event = malloc(nflashes * sizeof(short))))
+    if (!(flash_frame_time_offset_of_first_event = malloc(my_nflash * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(flash_frame_time_offset_of_last_event = malloc(nflashes * sizeof(short))))
+    if (!(flash_frame_time_offset_of_last_event = malloc(my_nflash * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(flash_lat = malloc(nflashes * sizeof(float))))
+    if (!(flash_lat = malloc(my_nflash * sizeof(float))))
 	return GLM_ERR_MEMORY;
-    if (!(flash_lon = malloc(nflashes * sizeof(float))))
+    if (!(flash_lon = malloc(my_nflash * sizeof(float))))
 	return GLM_ERR_MEMORY;
-    if (!(flash_area = malloc(nflashes * sizeof(short))))
+    if (!(flash_area = malloc(my_nflash * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(flash_energy = malloc(nflashes * sizeof(short))))
+    if (!(flash_energy = malloc(my_nflash * sizeof(short))))
 	return GLM_ERR_MEMORY;
-    if (!(flash_quality_flag = malloc(nflashes * sizeof(short))))
+    if (!(flash_quality_flag = malloc(my_nflash * sizeof(short))))
 	return GLM_ERR_MEMORY;
 
     /* Find the varids for the flash variables. */
@@ -200,7 +210,7 @@ read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash,
 
     /* Unpack the data into our already-allocated array of struct
      * GLM_FLASH. */
-    for (i = 0; i < nflashes; i++)
+    for (i = 0; i < my_nflash; i++)
     {
 	flash[i].id = flash_id[i];
 	flash[i].time_offset_of_first_event = (float)((unsigned short)flash_time_offset_of_first_event[i]) *
@@ -250,18 +260,19 @@ read_flash_vars(int ncid, int nflashes, GLM_FLASH_T *flash,
  * into the pre-allocated array of struct GLM_FLASH_T.
  *
  * @param ncid ID of already opened GLM file.
- * @param nflashs The number of flashs.
+ * @param nflash A pointer that gets the number of flashes. Ignored if
+ * NULL.
  * @param flash Pointer to already-allocated arrat of GLM_FLASH_T.
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
 */
 int
-glm_read_flash_structs(int ncid, int nflashs, GLM_FLASH_T *flash)
+glm_read_flash_structs(int ncid, size_t *nflash, GLM_FLASH_T *flash)
 {
     int ret;
 
-    if ((ret = read_flash_vars(ncid, nflashs, flash, NULL, NULL,
+    if ((ret = read_flash_vars(ncid, nflash, flash, NULL, NULL,
                                NULL, NULL, NULL, NULL, NULL, NULL, NULL)))
 	return ret;
 
@@ -273,13 +284,14 @@ glm_read_flash_structs(int ncid, int nflashs, GLM_FLASH_T *flash)
  * into the pre-allocated array of struct GLM_FLASH_T.
  *
  * @param ncid ID of already opened GLM file.
- * @param nflashs The number of flashs.
+ * @param nflash A pointer that gets the number of flashes. Ignored if
+ * NULL.
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
 */
 int
-glm_read_flash_arrays(int ncid, int nflashs,
+glm_read_flash_arrays(int ncid, size_t *nflash,
                       unsigned int *time_offset_of_first_event,
                       unsigned int *time_offset_of_last_event,
                       unsigned int *frame_time_offset_of_first_event,
@@ -289,7 +301,7 @@ glm_read_flash_arrays(int ncid, int nflashs,
 {
     int ret;
 
-    if ((ret = read_flash_vars(ncid, nflashs, NULL, time_offset_of_first_event,
+    if ((ret = read_flash_vars(ncid, nflash, NULL, time_offset_of_first_event,
                                time_offset_of_last_event, frame_time_offset_of_first_event,
                                frame_time_offset_of_last_event, lat, lon, area,
                                energy, quality_flag)))
