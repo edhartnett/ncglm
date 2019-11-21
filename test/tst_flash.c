@@ -24,6 +24,7 @@ main()
     {
         int ncid;
         size_t nevent, ngroup, nflash;
+        size_t my_nflash;
         GLM_FLASH_T *flash;
         int ret;
 
@@ -39,7 +40,8 @@ main()
         if (!(flash = malloc(nflash * sizeof(GLM_FLASH_T)))) ERR;
 
         /* Read data. */
-        if (glm_read_flash_structs(ncid, nflash, flash)) ERR;
+        if (glm_read_flash_structs(ncid, &my_nflash, flash)) ERR;
+        if (my_nflash != nflash) ERR;
 
         /* Free resources. */
         free(flash);

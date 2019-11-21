@@ -329,7 +329,7 @@ glm_read_file(char *file_name, int verbose)
     int ncid;
 
     size_t nevents, ngroups, nflashes;
-    size_t my_nevent, my_ngroup;
+    size_t my_nevent, my_ngroup, my_nflash;
 
     /* Structs of events, groups, flashes. */
     GLM_EVENT_T *event;
@@ -381,8 +381,10 @@ glm_read_file(char *file_name, int verbose)
 	return GLM_ERR_MEMORY;
     if (my_ngroup != ngroups)
         return GLM_ERR_UNEXPECTED;
-    if ((ret = glm_read_flash_structs(ncid, nflashes, flash)))
+    if ((ret = glm_read_flash_structs(ncid, &my_nflash, flash)))
 	return GLM_ERR_MEMORY;
+    if (my_nflash != nflashes)
+        return GLM_ERR_UNEXPECTED;
     if ((ret = read_scalars(ncid, &glm_scalar)))
 	return GLM_ERR_MEMORY;
 
