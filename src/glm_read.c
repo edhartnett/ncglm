@@ -419,7 +419,7 @@ glm_read_file_arrays(char *file_name, int verbose)
 
     /* Arrays for event data. */
     int *event_id;
-    unsigned int *time_offset;
+    float *time_offset;
     float *lat, *lon, *energy;
     int *parent_group_id;
 
@@ -449,7 +449,7 @@ glm_read_file_arrays(char *file_name, int verbose)
     /* Allocate storage for event arrays. */
     if (!(event_id = malloc(nevents * sizeof(int))))
 	return GLM_ERR_MEMORY;
-    if (!(time_offset = malloc(nevents * sizeof(unsigned int))))
+    if (!(time_offset = malloc(nevents * sizeof(float))))
 	return GLM_ERR_MEMORY;
     if (!(lat = malloc(nevents * sizeof(float))))
 	return GLM_ERR_MEMORY;

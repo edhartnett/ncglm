@@ -35,7 +35,7 @@ extern "C" {
     int glm_read_group_structs(int ncid, size_t *ngroups, GLM_GROUP_T *group);
     int glm_read_flash_structs(int ncid, size_t *nflashes, GLM_FLASH_T *flash);
     int glm_read_event_arrays(int ncid, size_t *nevent, int *event_id,
-                              unsigned int *time_offset, float *lat, float *lon,
+                              float *time_offset, float *lat, float *lon,
                               float *energy, int *parent_group_id);
     int glm_read_group_arrays(int ncid, size_t *ngroups, unsigned int *time_offset,
                               float *lat, float *lon, float *energy, float *area,
