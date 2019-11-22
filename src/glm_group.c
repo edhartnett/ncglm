@@ -40,7 +40,7 @@
 */
 static int
 read_group_vars(int ncid, size_t *ngroup, GLM_GROUP_T *group,
-                unsigned int *time_offset, float *lat, float *lon,
+                float *time_offset, float *lat, float *lon,
                 float *energy, float *area, unsigned int *parent_flash_id,
                 short *quality_flag)
 {
@@ -167,8 +167,8 @@ read_group_vars(int ncid, size_t *ngroup, GLM_GROUP_T *group,
     for (i = 0; i < my_ngroup; i++)
     {
 	group[i].id = group_id[i];
-	group[i].time_offset = (float)((unsigned short)group_time_offset[i]) *
-	    (unsigned short)group_time_offset_scale + (unsigned short)group_time_offset_offset;
+	group[i].time_offset = (float)((unsigned short)group_time_offset[i] + 65536) *
+	    group_time_offset_scale + group_time_offset_offset;
 	group[i].lat = group_lat[i];
 	group[i].lon = group_lon[i];
 	group[i].area = (float)((unsigned short)group_area[i]) *
@@ -252,7 +252,7 @@ glm_read_group_structs(int ncid, size_t *ngroup, GLM_GROUP_T *group)
  * @author Ed Hartnett
 */
 int
-glm_read_group_arrays(int ncid, size_t *ngroup, unsigned int *time_offset,
+glm_read_group_arrays(int ncid, size_t *ngroup, float *time_offset,
                       float *lat, float *lon, float *energy, float *area,
                       unsigned int *parent_flash_id, short *quality_flag)
 {

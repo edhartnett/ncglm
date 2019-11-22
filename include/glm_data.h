@@ -87,7 +87,7 @@ typedef struct GLM_EVENT
 typedef struct GLM_GROUP
 {
     int id;
-    unsigned int time_offset;
+    float time_offset;
     float lat;
     float lon;
     float energy;
