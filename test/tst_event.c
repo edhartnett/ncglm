@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <time.h>
 #include "un_test.h"
 #include "ncglm.h"
 
@@ -15,6 +16,20 @@
  * total_err is the number of errors in the entire test program, which
  * generally cosists of several sets of tests. */
 int total_err = 0, err = 0;
+
+void print_time(unsigned long long tick_count)
+{
+    static const unsigned long ticks_per_sec = 100000000L;
+    static const time_t epoch_delta = 16071L*24*60*60;
+    time_t seconds = tick_count/ticks_per_sec + epoch_delta;
+
+    unsigned long fraction = tick_count%ticks_per_sec;
+    struct tm tm = *gmtime(&seconds);
+    printf("%4d-%02d-%02d %02d:%02d:%02d.%03lu\n",
+           tm.tm_year+1900, tm.tm_mon+1, tm.tm_mday,
+           tm.tm_hour, tm.tm_min, tm.tm_sec,
+           fraction/10000);
+}
 
 int
 main()
@@ -42,6 +57,11 @@ main()
         /* Read data. */
         if (glm_read_event_structs(ncid, &my_nevent, event)) ERR;
         if (my_nevent != nevent) ERR;
+
+        /* Find the time of the first event. */
+        printf("time_offset %g\n", event[0].time_offset);
+        /* for (int e = 0; e < nevent; e++) */
+        /*     print_time(event[e].time_offset); */
 
         /* Free resources. */
         free(event);

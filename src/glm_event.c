@@ -58,8 +58,8 @@
 */
 static int
 read_event_vars(int ncid, size_t *nevent, GLM_EVENT_T *event, int *event_id,
-                unsigned int *time_offset, float *lat, float *lon,
-                float *energy, int *parent_group_id)
+                float *time_offset, float *lat, float *lon, float *energy,
+                int *parent_group_id)
 {
     size_t my_nevent;
 
@@ -164,14 +164,14 @@ read_event_vars(int ncid, size_t *nevent, GLM_EVENT_T *event, int *event_id,
      * GLM_EVENT. */
     for (i = 0; i < my_nevent; i++)
     {
-        unsigned int my_time_offset;
+        float my_time_offset;
         float my_lat;
         float my_lon;
         float my_energy;
 
         /* Unpack some values. */
-        my_time_offset = (float)((unsigned short)event_time_offset[i]) *
-            (unsigned short)event_time_offset_scale + (unsigned short)event_time_offset_offset;
+        my_time_offset = (float)((unsigned short)event_time_offset[i] + 65536) *
+            event_time_offset_scale + event_time_offset_offset;
         my_lat = (float)((unsigned short)event_lat[i]) *
             (unsigned short)event_lat_scale + (unsigned short)event_lat_offset;
         my_lon = (float)((unsigned short)event_lon[i]) *
@@ -265,7 +265,7 @@ glm_read_event_structs(int ncid, size_t *nevent, GLM_EVENT_T *event)
 */
 int
 glm_read_event_arrays(int ncid, size_t *nevent, int *event_id,
-                      unsigned int *time_offset, float *lat, float *lon,
+                      float *time_offset, float *lat, float *lon,
                       float *energy, int *parent_group_id)
 {
     int ret;
