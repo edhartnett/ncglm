@@ -60,6 +60,8 @@ main()
 
         /* Find the time of the first event. */
         printf("time_offset %g\n", event[0].time_offset);
+        printf("lat %g lon %g\n", event[0].lat, event[0].lon);
+        printf("energy %g parent_group_id %d\n", event[0].energy, event[0].parent_group_id);
         /* for (int e = 0; e < nevent; e++) */
         /*     print_time(event[e].time_offset); */
 
