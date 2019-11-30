@@ -172,9 +172,9 @@ read_group_vars(int ncid, size_t *ngroup, GLM_GROUP_T *group,
 	group[i].lat = group_lat[i];
 	group[i].lon = group_lon[i];
 	group[i].area = (float)((unsigned short)group_area[i]) *
-	    (unsigned short)group_area_scale + (unsigned short)group_area_offset;
+	    group_area_scale + group_area_offset;
 	group[i].energy = (float)((unsigned short)group_energy[i]) *
-	    (unsigned short)group_energy_scale + (unsigned short)group_energy_offset;
+	    group_energy_scale + group_energy_offset;
 	group[i].parent_flash_id = group_parent_flash_id[i];
 	group[i].quality_flag = group_quality_flag[i];
     }

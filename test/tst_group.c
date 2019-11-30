@@ -42,6 +42,11 @@ main()
         /* Read data. */
         if (glm_read_group_structs(ncid, &my_ngroup, group)) ERR;
         if (my_ngroup != ngroup) ERR;
+        printf("id %d time_offset %g lat %g lon %g energy %g area %g "
+               "parent_flash_id %d quality_flag %d\n", group[0].id,
+               group[0].time_offset, group[0].lat, group[0].lon,
+               group[0].energy, group[0].area, group[0].parent_flash_id,
+               group[0].quality_flag);
 
         /* Free resources. */
         free(group);

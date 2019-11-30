@@ -172,12 +172,12 @@ read_event_vars(int ncid, size_t *nevent, GLM_EVENT_T *event, int *event_id,
         /* Unpack some values. */
         my_time_offset = (float)((unsigned short)event_time_offset[i] + 65536) *
             event_time_offset_scale + event_time_offset_offset;
-        my_lat = (float)((unsigned short)event_lat[i]) *
-            (unsigned short)event_lat_scale + (unsigned short)event_lat_offset;
-        my_lon = (float)((unsigned short)event_lon[i]) *
-            (unsigned short)event_lon_scale + (unsigned short)event_lon_offset;
+        my_lat = (float)((unsigned short)event_lat[i]) * event_lat_scale +
+            event_lat_offset;
+        my_lon = (float)((unsigned short)event_lon[i]) * event_lon_scale +
+            event_lon_offset;
         my_energy = (float)((unsigned short)event_energy[i]) *
-            (unsigned short)event_energy_scale + (unsigned short)event_energy_offset;
+            event_energy_scale + event_energy_offset;
 
         if (event) /* fill structs */
         {

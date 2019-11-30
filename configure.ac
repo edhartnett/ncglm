@@ -60,6 +60,10 @@ if test "x$enable_docs" = xyes; then
    AC_CONFIG_FILES([docs/Doxyfile])
 fi
 
+# We need the math library
+AC_CHECK_LIB([m], [floor], [],
+[AC_MSG_ERROR([Can't find or link to the math library.])])
+
 # Check for netCDF C library.
 AC_SEARCH_LIBS([nc_create], [netcdf], [],
                             [AC_MSG_ERROR([Can't find or link to the netcdf C library, set CPPFLAGS/LDFLAGS.])])
