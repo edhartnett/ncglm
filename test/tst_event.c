@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
+#include <math.h>
 #include "un_test.h"
 #include "ncglm.h"
 
@@ -17,13 +18,15 @@
  * generally cosists of several sets of tests. */
 int total_err = 0, err = 0;
 
-void print_time(unsigned long long tick_count)
+void print_time(float time_offset)
 {
     static const unsigned long ticks_per_sec = 100000000L;
     static const time_t epoch_delta = 16071L*24*60*60;
-    time_t seconds = tick_count/ticks_per_sec + epoch_delta;
+    time_t seconds = time_offset + epoch_delta;
+    int int_part = (int)time_offset;
+    float fractional = round(time_offset * 100) / 100 - int_part;
 
-    unsigned long fraction = tick_count%ticks_per_sec;
+    unsigned long fraction = fractional * ticks_per_sec;
     struct tm tm = *gmtime(&seconds);
     printf("%4d-%02d-%02d %02d:%02d:%02d.%03lu\n",
            tm.tm_year+1900, tm.tm_mon+1, tm.tm_mday,
@@ -62,6 +65,7 @@ main()
         printf("time_offset %g\n", event[0].time_offset);
         printf("lat %g lon %g\n", event[0].lat, event[0].lon);
         printf("energy %g parent_group_id %d\n", event[0].energy, event[0].parent_group_id);
+        print_time(event[0].time_offset);
         /* for (int e = 0; e < nevent; e++) */
         /*     print_time(event[e].time_offset); */
 

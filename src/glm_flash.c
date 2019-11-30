@@ -214,19 +214,19 @@ read_flash_vars(int ncid, size_t *nflash, GLM_FLASH_T *flash,
     {
 	flash[i].id = flash_id[i];
 	flash[i].time_offset_of_first_event = (float)((unsigned short)flash_time_offset_of_first_event[i]) *
-	    (unsigned short)flash_time_offset_of_first_event_scale + (unsigned short)flash_time_offset_of_first_event_offset;
+	    flash_time_offset_of_first_event_scale + flash_time_offset_of_first_event_offset;
 	flash[i].time_offset_of_last_event = (float)((unsigned short)flash_time_offset_of_last_event[i]) *
-	    (unsigned short)flash_time_offset_of_last_event_scale + (unsigned short)flash_time_offset_of_last_event_offset;
+	    flash_time_offset_of_last_event_scale + flash_time_offset_of_last_event_offset;
 	flash[i].frame_time_offset_of_first_event = (float)((unsigned short)flash_frame_time_offset_of_first_event[i]) *
-	    (unsigned short)flash_frame_time_offset_of_first_event_scale + (unsigned short)flash_frame_time_offset_of_first_event_offset;
+	    flash_frame_time_offset_of_first_event_scale + flash_frame_time_offset_of_first_event_offset;
 	flash[i].frame_time_offset_of_last_event = (float)((unsigned short)flash_frame_time_offset_of_last_event[i]) *
-	    (unsigned short)flash_frame_time_offset_of_last_event_scale + (unsigned short)flash_frame_time_offset_of_last_event_offset;
+	    flash_frame_time_offset_of_last_event_scale + flash_frame_time_offset_of_last_event_offset;
 	flash[i].lat = flash_lat[i];
 	flash[i].lon = flash_lon[i];
-	flash[i].area = (float)((unsigned short)flash_area[i]) * (unsigned short)flash_area_scale +
-	    (unsigned short)flash_area_offset;
-	flash[i].energy = (float)((unsigned short)flash_energy[i]) * (unsigned short)flash_energy_scale +
-	    (unsigned short)flash_energy_offset;
+	flash[i].area = (float)((unsigned short)flash_area[i]) * flash_area_scale +
+	    flash_area_offset;
+	flash[i].energy = (float)((unsigned short)flash_energy[i]) * flash_energy_scale +
+            flash_energy_offset;
 	flash[i].quality_flag = flash_quality_flag[i];
     }
 
