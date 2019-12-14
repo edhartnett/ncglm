@@ -28,18 +28,29 @@
 extern "C" {
 #endif
 
+    /* Learn the lengths of each dimension. */
     int glm_read_dims(int ncid, size_t *nevent, size_t *ngroup, size_t *nflash);
-    /* int show_att(int ncid, int varid, char *name); */
 
+    /* Read event data into array of GLM_EVENT_T struct. */
     int glm_read_event_structs(int ncid, size_t *nevent, GLM_EVENT_T *event);
+
+    /* Read group data into array of GLM_GROUP_T struct. */
     int glm_read_group_structs(int ncid, size_t *ngroups, GLM_GROUP_T *group);
+
+    /* Read flash data into array of GLM_FLASH_T struct. */
     int glm_read_flash_structs(int ncid, size_t *nflashes, GLM_FLASH_T *flash);
+
+    /* Read event data into arrays. */
     int glm_read_event_arrays(int ncid, size_t *nevent, int *event_id,
                               float *time_offset, float *lat, float *lon,
                               float *energy, int *parent_group_id);
+
+    /* Read group data into arrays. */
     int glm_read_group_arrays(int ncid, size_t *ngroups, float *time_offset,
                               float *lat, float *lon, float *energy, float *area,
                               unsigned int *parent_flash_id, short *quality_flag);
+
+    /* Read flash data into arrays. */
     int glm_read_flash_arrays(int ncid, size_t *nflash,
                               unsigned int *time_offset_of_first_event,
                               unsigned int *time_offset_of_last_event,
@@ -48,9 +59,13 @@ extern "C" {
                               float *lat, float *lon, float *area, float *energy,
                               short *quality_flag);
 
+    /* Read scalars and small arrays into GLM_SCALAR_T struct. */
     int read_scalars(int ncid, GLM_SCALAR_T *glm_scalar);
 
+    /* Read the whole file. */
     int glm_read_file(char *file_name, int verbose);
+
+    /* Read the whole file into arrays. */
     int glm_read_file_arrays(char *file_name, int verbose);
 
 #if defined(__cplusplus)
