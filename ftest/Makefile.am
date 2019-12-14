@@ -11,7 +11,7 @@ LOG_DRIVER = $(SHELL) $(top_srcdir)/test-driver-verbose
 TEST_EXTENSIONS = .sh
 
 # Find the include files.
-AM_CPPFLAGS = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/fsrc
 
 # Link to our assembled libraries.
 AM_LDFLAGS = ${top_builddir}/src/libncglm.la ${top_builddir}/fsrc/libncglmf.la

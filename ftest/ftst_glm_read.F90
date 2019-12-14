@@ -4,12 +4,15 @@
 
 program ftst_glm_read
   use netcdf
+  use ncglm
+  implicit none
   integer ncid
   character (len = *), parameter :: filename = &
        '../test/OR_GLM-L2-LCFA_G17_s20192692359400_e20192700000000_c20192700000028.nc'
 
   print *, 'howdy'
   call check(nf90_open(filename, 0, ncid))
+  call check(glm_read_dims())
   call check(nf90_close(ncid))
 
 contains
