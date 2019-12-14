@@ -9,6 +9,10 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 lib_LTLIBRARIES = libncglmf.la
 libncglmf_la_LDFLAGS = -version-info 0:0:0
 
+# Link to our assembled C library.
+AM_LDFLAGS = ${top_builddir}/src/libncglm.la
+#LDADD = ${top_builddir}/src/libncglm.la ${top_builddir}/fsrc/libncglmf.la
+
 # Each convenience library depends on its source.
 libncglmf_la_SOURCES = ncglm.F90
 

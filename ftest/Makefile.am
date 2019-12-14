@@ -14,8 +14,8 @@ TEST_EXTENSIONS = .sh
 AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/fsrc
 
 # Link to our assembled libraries.
-AM_LDFLAGS = ${top_builddir}/src/libncglm.la ${top_builddir}/fsrc/libncglmf.la
-LDADD = ${top_builddir}/src/libncglm.la ${top_builddir}/fsrc/libncglmf.la
+AM_LDFLAGS = ${top_builddir}/fsrc/libncglmf.la ${top_builddir}/src/libncglm.la
+LDADD = ${top_builddir}/fsrc/libncglmf.la ${top_builddir}/src/libncglm.la
 
 GLM_FTESTS = ftst_glm_read
 

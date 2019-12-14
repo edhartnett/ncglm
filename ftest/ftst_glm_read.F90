@@ -13,7 +13,7 @@ program ftst_glm_read
 
   print *, 'howdy'
   call check(nf90_open(filename, 0, ncid))
-  call check(glm_read_dims(ncid, nevent, ngroup, nflash))
+  call check(fglm_read_dims(ncid, nevent, ngroup, nflash))
   if (nevent .ne. 4578) stop 2;
 
 !  || ngroup != 1609 || nflash != 123) ERR;
