@@ -40,6 +40,15 @@ AC_PROG_INSTALL
 # Check to see if any macros must be set to enable large (>2GB) files.
 AC_SYS_LARGEFILE
 
+# Does the user want to enable Fortran library?
+AC_MSG_CHECKING([whether Fortran library should be built])
+AC_ARG_ENABLE([fortran],
+              [AS_HELP_STRING([--enable-fortran],
+                              [build the ncglm Fortran library.])])
+test "x$enable_fortran" = xyes || enable_fortran=no
+AC_MSG_RESULT([$enable_fortran])
+AM_CONDITIONAL(BUILD_FORTRAN, [test "x$enable_fortran" = xyes])
+
 # Does the user want to build documentation?
 AC_MSG_CHECKING([whether documentation should be build (requires doxygen)])
 AC_ARG_ENABLE([docs],
@@ -69,10 +78,11 @@ AC_SEARCH_LIBS([nc_create], [netcdf], [],
                             [AC_MSG_ERROR([Can't find or link to the netcdf C library, set CPPFLAGS/LDFLAGS.])])
 
 # Check for netCDF Fortran library.
-dnl AC_LANG_PUSH(Fortran)
-dnl AC_SEARCH_LIBS([nf_create], [netcdff], [],
-dnl                             [AC_MSG_ERROR([Can't find or link to the netcdf Fortran library, set CPPFLAGS/LDFLAGS.])])
-dnl AC_LANG_POP(Fortran)
+if test "x$enable_fortran" = xyes; then
+   AC_LANG_PUSH(Fortran)
+   AC_SEARCH_LIBS([nf90_create], [netcdff], [], [AC_MSG_ERROR([Can't find or link to the netcdf Fortran library, set CPPFLAGS/LDFLAGS.])])
+   AC_LANG_POP(Fortran)
+fi
 
 # Make sure the test data file is available in vpath builds.
 AC_CONFIG_LINKS([test/OR_GLM-L2-LCFA_G17_s20192692359400_e20192700000000_c20192700000028.nc:test/OR_GLM-L2-LCFA_G17_s20192692359400_e20192700000000_c20192700000028.nc])
