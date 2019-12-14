@@ -8,7 +8,16 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 # This is a libtool library.
 lib_LTLIBRARIES = libncglmf.la
 libncglmf_la_LDFLAGS = -version-info 0:0:0
+
+# Each convenience library depends on its source.
 libncglmf_la_SOURCES = ncglm.F90
 
-# Include cmake build system.
-#EXTRA_DIST = CMakeLists.txt
+# Each mod file depends on the .o file.
+ncglm.mod: ncglm.$(OBJEXT)
+
+# Mod files are built and then installed as headers.
+MODFILES = ncglm.mod
+include_HEADERS = $(MODFILES)
+BUILT_SOURCES = $(MODFILES)
+
+CLEANFILES = *.mod
