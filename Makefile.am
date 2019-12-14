@@ -12,6 +12,12 @@ if BUILD_DOCS
 DOCS = docs
 endif
 
-SUBDIRS = cmake include src test ${DOCS}
+# Does the user want the Fortran API?
+if BUILD_FORTRAN
+FSRC = fsrc
+FTEST = ftest
+endif
+
+SUBDIRS = cmake include src ${FSRC} test ${FTEST} ${DOCS}
 
 EXTRA_DIST = test-driver-verbose LICENSE README.md CMakeLists.txt

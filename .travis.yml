@@ -14,8 +14,11 @@ env:
 before_script:
 
 script:
+  - pwd
+  - export FCFLAGS=-I/usr/include
   - autoreconf -i
-  - ./configure
+  - ./configure --enable-fortran
+  - export DISTCHECK_CONFIGURE_FLAGS=--enable-fortran
   - make -j distcheck
 
 
