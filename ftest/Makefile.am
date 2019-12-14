@@ -13,25 +13,20 @@ TEST_EXTENSIONS = .sh
 # Find the include files.
 AM_CPPFLAGS = -I$(top_srcdir)/include
 
-# # Link to our assembled library.
-# AM_LDFLAGS = ${top_builddir}/src/libncglm.la
-# LDADD = ${top_builddir}/src/libncglm.la
+# Link to our assembled libraries.
+AM_LDFLAGS = ${top_builddir}/src/libncglm.la ${top_builddir}/fsrc/libncglmf.la
+LDADD = ${top_builddir}/src/libncglm.la ${top_builddir}/fsrc/libncglmf.la
 
-# GLM_TESTS = tst_glm_read tst_glm_read_arrays tst_glm_ncgen_write	\
-# tst_event tst_group tst_flash
+GLM_FTESTS = ftst_glm_read
 
-# # Build our test program.
-# check_PROGRAMS = ${GLM_TESTS}
+# Build our test program.
+check_PROGRAMS = ${GLM_FTESTS}
 
-# # Source code for the tests.
-# tst_glm_read_SOURCES = tst_glm_read.c un_test.h tst_utils.c
-# tst_glm_read_arrays_SOURCES = tst_glm_read_arrays.c un_test.h tst_utils.c
-# tst_event_SOURCES = tst_event.c un_test.h
-# tst_group_SOURCES = tst_group.c un_test.h
-# tst_flash_SOURCES = tst_flash.c un_test.h
+# Source code for the tests.
+ftst_glm_read_SOURCES = ftst_glm_read.F90
 
 # Run our test program.
-#TESTS = ${GLM_TESTS}
+TESTS = ${GLM_FTESTS}
 
 # Make sure these files are included in distribution.
 #EXTRA_DIST = CMakeLists.txt						\
