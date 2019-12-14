@@ -80,7 +80,7 @@ AC_SEARCH_LIBS([nc_create], [netcdf], [],
 # Check for netCDF Fortran library.
 if test "x$enable_fortran" = xyes; then
    AC_LANG_PUSH(Fortran)
-   AC_SEARCH_LIBS([nf90_create], [netcdff], [], [AC_MSG_ERROR([Can't find or link to the netcdf Fortran library, set CPPFLAGS/LDFLAGS.])])
+   AC_SEARCH_LIBS([nf_create], [netcdff], [], [AC_MSG_ERROR([Can't find or link to the netcdf Fortran library, set CPPFLAGS/LDFLAGS.])])
    AC_LANG_POP(Fortran)
 fi
 
