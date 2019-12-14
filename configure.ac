@@ -82,7 +82,9 @@ AC_CONFIG_FILES([Makefile
 	cmake/Makefile
         include/Makefile
         src/Makefile
+        fsrc/Makefile
 	test/Makefile
+	ftest/Makefile
 	docs/Makefile
         ])
 AC_OUTPUT()

@@ -12,6 +12,6 @@ if BUILD_DOCS
 DOCS = docs
 endif
 
-SUBDIRS = cmake include src test ${DOCS}
+SUBDIRS = cmake include src fsrc test ftest ${DOCS}
 
 EXTRA_DIST = test-driver-verbose LICENSE README.md CMakeLists.txt
