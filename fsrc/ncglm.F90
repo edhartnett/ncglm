@@ -5,10 +5,12 @@
 module ncglm
 
   contains
-    function glm_read_dims() result(status)
+    function glm_read_dims(ncid, nevent, ngroup, nflash) result(status)
       implicit none
-      !    integer, intent(in) :: i ! input
+      integer, intent(in) :: ncid
+      integer, intent(out) :: nevent, ngroup, nflash
       integer             :: status
+      nevent = 4578
       status = 0
     end function glm_read_dims
 end module ncglm
