@@ -16,7 +16,7 @@ before_script:
 script:
   - pwd
   - ls -l /usr/include
-  - ls -l /usr/local/include
+  - export FCFLAGS=-I/usr/include
   - autoreconf -i
   - ./configure --enable-fortran
   - export DISTCHECK_CONFIGURE_FLAGS=--enable-fortran
