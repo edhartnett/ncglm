@@ -8,7 +8,7 @@ module ncglm
      function glm_read_dims(ncid, nevent, ngroup, nflash) bind(c)
        use iso_c_binding
        integer(C_INT), value :: ncid
-       integer(C_INT), intent(INOUT) :: nevent, ngroup, nflash
+       integer(C_SIZE_T), intent(INOUT) :: nevent, ngroup, nflash
      end function glm_read_dims
   end interface
 
@@ -18,10 +18,13 @@ module ncglm
       implicit none
       integer, intent(in) :: ncid
       integer, intent(out) :: nevent, ngroup, nflash
+      integer*8 :: nevent8, ngroup8, nflash8
       integer :: status
       integer(C_INT) :: cstatus
 
-      nevent = 4578
-      status = glm_read_dims(ncid, nevent, ngroup, nflash)
+      status = glm_read_dims(ncid, nevent8, ngroup8, nflash8)
+      nevent = nevent8
+      ngroup = ngroup8
+      nflash = nflash8
     end function fglm_read_dims
 end module ncglm
