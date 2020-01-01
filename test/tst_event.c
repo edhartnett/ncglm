@@ -18,6 +18,13 @@
  * generally cosists of several sets of tests. */
 int total_err = 0, err = 0;
 
+#define EPSILON .0001
+
+int are_same(double a, double b)
+{
+    return fabs(a - b) < EPSILON ? 1 : 0;
+}
+
 void print_time(float time_offset)
 {
     static const unsigned long ticks_per_sec = 100000000L;
@@ -60,6 +67,9 @@ main()
         /* Read data. */
         if (glm_read_event_structs(ncid, &my_nevent, event)) ERR;
         if (my_nevent != nevent) ERR;
+
+        /* Check some timestamps. */
+        if (!are_same(event[0].time_offset, -0.475699)) ERR;
 
         /* Find the time of the first event. */
         printf("time_offset %g\n", event[0].time_offset);
