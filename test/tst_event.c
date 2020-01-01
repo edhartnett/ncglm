@@ -21,7 +21,7 @@ int total_err = 0, err = 0;
 void print_time(float time_offset)
 {
     static const unsigned long ticks_per_sec = 100000000L;
-    static const time_t epoch_delta = 16071L*24*60*60;
+    static const time_t epoch_delta = 18165*24*60*60;
     time_t seconds = time_offset + epoch_delta;
     int int_part = (int)time_offset;
     float fractional = round(time_offset * 100) / 100 - int_part;

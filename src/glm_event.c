@@ -71,6 +71,7 @@ read_event_vars(int ncid, size_t *nevent, GLM_EVENT_T *event, int *event_id,
     /* Storage for packed data. */
     int *my_event_id = NULL;
     short *event_lat = NULL;
+    unsigned short *event_lat2 = NULL;
     short *event_time_offset = NULL, *event_lon = NULL;
     short *event_energy = NULL;
     int *event_parent_group_id = NULL;
@@ -101,6 +102,8 @@ read_event_vars(int ncid, size_t *nevent, GLM_EVENT_T *event, int *event_id,
     if (!(event_time_offset = malloc(my_nevent * sizeof(short))))
 	return GLM_ERR_TIMER;
     if (!(event_lat = malloc(my_nevent * sizeof(short))))
+	return GLM_ERR_MEMORY;
+    if (!(event_lat2 = malloc(my_nevent * sizeof(unsigned short))))
 	return GLM_ERR_MEMORY;
     if (!(event_lon = malloc(my_nevent * sizeof(short))))
 	return GLM_ERR_MEMORY;
@@ -153,6 +156,9 @@ read_event_vars(int ncid, size_t *nevent, GLM_EVENT_T *event, int *event_id,
 	NC_ERR(ret);
     if ((ret = nc_get_var_short(ncid, event_lat_varid, event_lat)))
 	NC_ERR(ret);
+    ret = nc_get_var_ushort(ncid, event_lat_varid, event_lat2);
+    if (ret && ret != NC_ERANGE)
+	NC_ERR(ret);
     if ((ret = nc_get_var_short(ncid, event_lon_varid, event_lon)))
 	NC_ERR(ret);
     if ((ret = nc_get_var_short(ncid, event_energy_varid, event_energy)))
@@ -170,7 +176,7 @@ read_event_vars(int ncid, size_t *nevent, GLM_EVENT_T *event, int *event_id,
         float my_energy;
 
         /* Unpack some values. */
-        my_time_offset = (float)((unsigned short)event_time_offset[i] + 65536) *
+        my_time_offset = (float)((unsigned short)event_time_offset[i]) *
             event_time_offset_scale + event_time_offset_offset;
         my_lat = (float)((unsigned short)event_lat[i]) * event_lat_scale +
             event_lat_offset;
