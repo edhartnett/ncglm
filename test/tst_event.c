@@ -24,7 +24,6 @@ int total_err = 0, err = 0;
 int are_same(double a, double b)
 {
     /* printf("%.6f %.6f %g\n", a, b, fabs(a - b)); */
-    printf("%.6f\n", a);
     return fabs(a - b) < EPSILON ? 1 : 0;
 }
 
@@ -86,20 +85,20 @@ main()
         /* Check some values. */
         for (i = 0; i < NUM_VAL; i++)
         {
-            /* if (!are_same(event[i].time_offset, x_time[i])) ERR; */
-            /* if (!are_same(event[i].lat, x_lat[i])) ERR; */
+            if (!are_same(event[i].time_offset, x_time[i])) ERR;
+            if (!are_same(event[i].lat, x_lat[i])) ERR;
             if (!are_same(event[i].lon, x_lon[i])) ERR;
-            /* if (!are_same(event[i].energy, x_energy[i])) ERR; */
-            /* if (event[i].parent_group_id != x_parent_group_id[i]) ERR; */
+            if (!are_same(event[i].energy, x_energy[i])) ERR;
+            if (event[i].parent_group_id != x_parent_group_id[i]) ERR;
         }
 
         /* Print the values of the first 10 events. */
-        for (i = 0; i < 10; i++)
-        {
-            printf("time_offset[%d] %g\n", i, event[i].time_offset);
-            printf("lat %.6f lon %.6f\n", event[i].lat, event[i].lon);
-            printf("energy %.6f parent_group_id %d\n", event[i].energy, event[i].parent_group_id);
-        }
+        /* for (i = 0; i < 10; i++) */
+        /* { */
+        /*     printf("time_offset[%d] %g\n", i, event[i].time_offset); */
+        /*     printf("lat %.6f lon %.6f\n", event[i].lat, event[i].lon); */
+        /*     printf("energy %.6f parent_group_id %d\n", event[i].energy, event[i].parent_group_id); */
+        /* } */
         /* for (int e = 0; e < nevent; e++) */
         /*     print_time(event[e].time_offset); */
 
