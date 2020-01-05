@@ -18,10 +18,12 @@
  * generally cosists of several sets of tests. */
 int total_err = 0, err = 0;
 
-#define EPSILON .0001
+#define EPSILON .001
+#define NUM_VAL 5
 
 int are_same(double a, double b)
 {
+    /* printf("%g %g %g\n", a, b, fabs(a - b)); */
     return fabs(a - b) < EPSILON ? 1 : 0;
 }
 
@@ -51,6 +53,9 @@ main()
         size_t nevent, ngroup, nflash;
         size_t my_nevent;
         GLM_EVENT_T *event;
+        float expected_time[NUM_VAL] = {-0.475699, -0.475699, -0.444037,
+                                        -0.332646, -0.330739};
+        int i;
         int ret;
 
         /* Open the data file as read-only. */
@@ -69,10 +74,12 @@ main()
         if (my_nevent != nevent) ERR;
 
         /* Check some timestamps. */
-        if (!are_same(event[0].time_offset, -0.475699)) ERR;
+        for (i = 0; i < NUM_VAL; i++)
+            if (!are_same(event[i].time_offset, expected_time[i])) ERR;
 
-        /* Find the time of the first event. */
-        printf("time_offset %g\n", event[0].time_offset);
+        /* Print the times of the first 10 events. */
+        /* for (i = 0; i < 10; i++) */
+        /*     printf("time_offset[%d] %g\n", i, event[i].time_offset); */
         printf("lat %g lon %g\n", event[0].lat, event[0].lon);
         printf("energy %g parent_group_id %d\n", event[0].energy, event[0].parent_group_id);
         print_time(event[0].time_offset);
