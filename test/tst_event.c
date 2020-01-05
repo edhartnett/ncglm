@@ -77,12 +77,13 @@ main()
         for (i = 0; i < NUM_VAL; i++)
             if (!are_same(event[i].time_offset, expected_time[i])) ERR;
 
-        /* Print the times of the first 10 events. */
-        /* for (i = 0; i < 10; i++) */
+        /* Print the values of the first 10 events. */
+        for (i = 0; i < 10; i++)
+        {
         /*     printf("time_offset[%d] %g\n", i, event[i].time_offset); */
-        printf("lat %g lon %g\n", event[0].lat, event[0].lon);
-        printf("energy %g parent_group_id %d\n", event[0].energy, event[0].parent_group_id);
-        print_time(event[0].time_offset);
+            printf("lat %g lon %g\n", event[i].lat, event[i].lon);
+            printf("energy %g parent_group_id %d\n", event[i].energy, event[i].parent_group_id);
+        }
         /* for (int e = 0; e < nevent; e++) */
         /*     print_time(event[e].time_offset); */
 
