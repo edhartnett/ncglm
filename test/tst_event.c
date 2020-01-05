@@ -18,10 +18,19 @@
  * generally cosists of several sets of tests. */
 int total_err = 0, err = 0;
 
+#define EPSILON .0001
+#define NUM_VAL 5
+
+int are_same(double a, double b)
+{
+    /* printf("%.6f %.6f %g\n", a, b, fabs(a - b)); */
+    return fabs(a - b) < EPSILON ? 1 : 0;
+}
+
 void print_time(float time_offset)
 {
     static const unsigned long ticks_per_sec = 100000000L;
-    static const time_t epoch_delta = 16071L*24*60*60;
+    static const time_t epoch_delta = 18165*24*60*60;
     time_t seconds = time_offset + epoch_delta;
     int int_part = (int)time_offset;
     float fractional = round(time_offset * 100) / 100 - int_part;
@@ -44,6 +53,18 @@ main()
         size_t nevent, ngroup, nflash;
         size_t my_nevent;
         GLM_EVENT_T *event;
+        float x_time[NUM_VAL] = {-0.475699, -0.475699, -0.444037,
+                                        -0.332646, -0.330739};
+        float x_lat[NUM_VAL] = {23.9904, 23.9945, 23.9904, 23.9904,
+                                       23.9904};
+        float x_lon[NUM_VAL] = {-105.711212, -105.619804, -105.711212,
+                                -105.711212, -105.711212};
+        float x_energy[NUM_VAL] = {1.37337e-14, 7.62985e-15, 3.05194e-15,
+                                          4.57791e-15, 4.57791e-15};
+        unsigned int x_parent_group_id[NUM_VAL] = {467109464, 467109464,
+                                                          467109465, 467109472,
+                                                          467109473};
+        int i;
         int ret;
 
         /* Open the data file as read-only. */
@@ -61,11 +82,23 @@ main()
         if (glm_read_event_structs(ncid, &my_nevent, event)) ERR;
         if (my_nevent != nevent) ERR;
 
-        /* Find the time of the first event. */
-        printf("time_offset %g\n", event[0].time_offset);
-        printf("lat %g lon %g\n", event[0].lat, event[0].lon);
-        printf("energy %g parent_group_id %d\n", event[0].energy, event[0].parent_group_id);
-        print_time(event[0].time_offset);
+        /* Check some values. */
+        for (i = 0; i < NUM_VAL; i++)
+        {
+            if (!are_same(event[i].time_offset, x_time[i])) ERR;
+            if (!are_same(event[i].lat, x_lat[i])) ERR;
+            if (!are_same(event[i].lon, x_lon[i])) ERR;
+            if (!are_same(event[i].energy, x_energy[i])) ERR;
+            if (event[i].parent_group_id != x_parent_group_id[i]) ERR;
+        }
+
+        /* Print the values of the first 10 events. */
+        /* for (i = 0; i < 10; i++) */
+        /* { */
+        /*     printf("time_offset[%d] %g\n", i, event[i].time_offset); */
+        /*     printf("lat %.6f lon %.6f\n", event[i].lat, event[i].lon); */
+        /*     printf("energy %.6f parent_group_id %d\n", event[i].energy, event[i].parent_group_id); */
+        /* } */
         /* for (int e = 0; e < nevent; e++) */
         /*     print_time(event[e].time_offset); */
 
