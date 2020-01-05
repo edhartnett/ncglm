@@ -17,7 +17,7 @@
  * @param ncid ID of already opened GLM file.
  * @param nflash A pointer that gets the number of flashes. Ignored if
  * NULL.
- * @param flash Pointer to already-allocated arrat of GLM_FLASH_T, or
+ * @param flash Pointer to already-allocated array of GLM_FLASH_T, or
  * NULL if arrays are to be read.
  * @param time_offset_of_first_event Pointer to already-allocated
  * array of float for time_offset_of_first_event data, or NULL
@@ -42,7 +42,6 @@
  * energy data, or NULL if struct reads are being done.
  * @param quality_flag Pointer to already-allocated array of short
  * for quality flag data, or NULL if struct reads are being done.
- *
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett
@@ -297,6 +296,29 @@ glm_read_flash_structs(int ncid, size_t *nflash, GLM_FLASH_T *flash)
  * @param ncid ID of already opened GLM file.
  * @param nflash A pointer that gets the number of flashes. Ignored if
  * NULL.
+ * @param time_offset_of_first_event Pointer to already-allocated
+ * array of float for time_offset_of_first_event data, or NULL
+ * if struct reads are being done.
+ * @param time_offset_of_last_event Pointer to already-allocated
+ * array of float for time_offset_of_last_event data, or NULL
+ * if struct reads are being done.
+ * @param frame_time_offset_of_first_event Pointer to
+ * already-allocated array of float for
+ * frame_time_offset_of_first_event data, or NULL if struct reads are
+ * being done.
+ * @param frame_time_offset_of_last_event Pointer to already-allocated
+ * array of float for frame_time_offset_of_last_event data, or
+ * NULL if struct reads are being done.
+ * @param lat Pointer to already-allocated array of float for lat
+ * data, or NULL if struct reads are being done.
+ * @param lon Pointer to already-allocated array of float for lon
+ * data, or NULL if struct reads are being done.
+ * @param area Pointer to already-allocated array of float for
+ * area data, or NULL if struct reads are being done.
+ * @param energy Pointer to already-allocated array of float for
+ * energy data, or NULL if struct reads are being done.
+ * @param quality_flag Pointer to already-allocated array of short
+ * for quality flag data, or NULL if struct reads are being done.
  *
  * @return 0 for success, error code otherwise.
  * @author Ed Hartnett

@@ -11,6 +11,19 @@
 #include "ncglm.h"
 
 /**
+ * @mainpage The Geostationary Lightning Mapper C Library
+ *
+ * @section intro Introduction
+ *
+ * @section events Events
+ *
+ * @section groups Groups
+ *
+ * @section flashes Flashes
+ *
+ */
+
+/**
  * Read and unpack all the event data in the file. It will be loaded
  * into the pre-allocated array of struct event.
  *
