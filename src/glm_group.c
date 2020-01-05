@@ -167,7 +167,7 @@ read_group_vars(int ncid, size_t *ngroup, GLM_GROUP_T *group,
     for (i = 0; i < my_ngroup; i++)
     {
 	group[i].id = group_id[i];
-	group[i].time_offset = (float)((unsigned short)group_time_offset[i] + 65536) *
+	group[i].time_offset = (float)((unsigned short)group_time_offset[i]) *
 	    group_time_offset_scale + group_time_offset_offset;
 	group[i].lat = group_lat[i];
 	group[i].lon = group_lon[i];

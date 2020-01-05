@@ -52,10 +52,10 @@ extern "C" {
 
     /* Read flash data into arrays. */
     int glm_read_flash_arrays(int ncid, size_t *nflash,
-                              unsigned int *time_offset_of_first_event,
-                              unsigned int *time_offset_of_last_event,
-                              unsigned int *frame_time_offset_of_first_event,
-                              unsigned int *frame_time_offset_of_last_event,
+                              float *time_offset_of_first_event,
+                              float *time_offset_of_last_event,
+                              float *frame_time_offset_of_first_event,
+                              float *frame_time_offset_of_last_event,
                               float *lat, float *lon, float *area, float *energy,
                               short *quality_flag);
 

@@ -20,17 +20,17 @@
  * @param flash Pointer to already-allocated arrat of GLM_FLASH_T, or
  * NULL if arrays are to be read.
  * @param time_offset_of_first_event Pointer to already-allocated
- * array of unsigned int for time_offset_of_first_event data, or NULL
+ * array of float for time_offset_of_first_event data, or NULL
  * if struct reads are being done.
  * @param time_offset_of_last_event Pointer to already-allocated
- * array of unsigned int for time_offset_of_last_event data, or NULL
+ * array of float for time_offset_of_last_event data, or NULL
  * if struct reads are being done.
  * @param frame_time_offset_of_first_event Pointer to
- * already-allocated array of unsigned int for
+ * already-allocated array of float for
  * frame_time_offset_of_first_event data, or NULL if struct reads are
  * being done.
  * @param frame_time_offset_of_last_event Pointer to already-allocated
- * array of unsigned int for frame_time_offset_of_last_event data, or
+ * array of float for frame_time_offset_of_last_event data, or
  * NULL if struct reads are being done.
  * @param lat Pointer to already-allocated array of float for lat
  * data, or NULL if struct reads are being done.
@@ -49,10 +49,10 @@
  */
 static int
 read_flash_vars(int ncid, size_t *nflash, GLM_FLASH_T *flash,
-                unsigned int *time_offset_of_first_event,
-                unsigned int *time_offset_of_last_event,
-                unsigned int *frame_time_offset_of_first_event,
-                unsigned int *frame_time_offset_of_last_event,
+                float *time_offset_of_first_event,
+                float *time_offset_of_last_event,
+                float *frame_time_offset_of_first_event,
+                float *frame_time_offset_of_last_event,
                 float *lat, float *lon, float *area, float *energy,
                 short *quality_flag)
 {
@@ -121,18 +121,24 @@ read_flash_vars(int ncid, size_t *nflash, GLM_FLASH_T *flash,
     if ((ret = nc_inq_varid(ncid, FLASH_ID, &flash_id_varid)))
 	NC_ERR(ret);
 
-    if ((ret = nc_inq_varid(ncid, FLASH_TIME_OFFSET_OF_FIRST_EVENT, &flash_time_offset_of_first_event_varid)))
+    if ((ret = nc_inq_varid(ncid, FLASH_TIME_OFFSET_OF_FIRST_EVENT,
+                            &flash_time_offset_of_first_event_varid)))
 	NC_ERR(ret);
-    if ((ret = nc_get_att_float(ncid, flash_time_offset_of_first_event_varid, SCALE_FACTOR, &flash_time_offset_of_first_event_scale)))
+    if ((ret = nc_get_att_float(ncid, flash_time_offset_of_first_event_varid,
+                                SCALE_FACTOR, &flash_time_offset_of_first_event_scale)))
 	NC_ERR(ret);
-    if ((ret = nc_get_att_float(ncid, flash_time_offset_of_first_event_varid, ADD_OFFSET, &flash_time_offset_of_first_event_offset)))
+    if ((ret = nc_get_att_float(ncid, flash_time_offset_of_first_event_varid,
+                                ADD_OFFSET, &flash_time_offset_of_first_event_offset)))
 	NC_ERR(ret);
 
-    if ((ret = nc_inq_varid(ncid, FLASH_TIME_OFFSET_OF_LAST_EVENT, &flash_time_offset_of_last_event_varid)))
+    if ((ret = nc_inq_varid(ncid, FLASH_TIME_OFFSET_OF_LAST_EVENT,
+                            &flash_time_offset_of_last_event_varid)))
 	NC_ERR(ret);
-    if ((ret = nc_get_att_float(ncid, flash_time_offset_of_last_event_varid, SCALE_FACTOR, &flash_time_offset_of_last_event_scale)))
+    if ((ret = nc_get_att_float(ncid, flash_time_offset_of_last_event_varid,
+                                SCALE_FACTOR, &flash_time_offset_of_last_event_scale)))
 	NC_ERR(ret);
-    if ((ret = nc_get_att_float(ncid, flash_time_offset_of_last_event_varid, ADD_OFFSET, &flash_time_offset_of_last_event_offset)))
+    if ((ret = nc_get_att_float(ncid, flash_time_offset_of_last_event_varid,
+                                ADD_OFFSET, &flash_time_offset_of_last_event_offset)))
 	NC_ERR(ret);
 
     if ((ret = nc_inq_varid(ncid, FLASH_FRAME_TIME_OFFSET_OF_FIRST_EVENT,
@@ -165,21 +171,26 @@ read_flash_vars(int ncid, size_t *nflash, GLM_FLASH_T *flash,
 
     if ((ret = nc_inq_varid(ncid, FLASH_AREA, &flash_area_varid)))
 	NC_ERR(ret);
-    if ((ret = nc_get_att_float(ncid, flash_area_varid, SCALE_FACTOR, &flash_area_scale)))
+    if ((ret = nc_get_att_float(ncid, flash_area_varid, SCALE_FACTOR,
+                                &flash_area_scale)))
 	NC_ERR(ret);
-    if ((ret = nc_get_att_float(ncid, flash_area_varid, ADD_OFFSET, &flash_area_offset)))
+    if ((ret = nc_get_att_float(ncid, flash_area_varid, ADD_OFFSET,
+                                &flash_area_offset)))
 	NC_ERR(ret);
 
     if ((ret = nc_inq_varid(ncid, FLASH_ENERGY, &flash_energy_varid)))
 	NC_ERR(ret);
-    if ((ret = nc_get_att_float(ncid, flash_energy_varid, SCALE_FACTOR, &flash_energy_scale)))
+    if ((ret = nc_get_att_float(ncid, flash_energy_varid, SCALE_FACTOR,
+                                &flash_energy_scale)))
 	NC_ERR(ret);
-    if ((ret = nc_get_att_float(ncid, flash_energy_varid, ADD_OFFSET, &flash_energy_offset)))
+    if ((ret = nc_get_att_float(ncid, flash_energy_varid, ADD_OFFSET,
+                                &flash_energy_offset)))
 	NC_ERR(ret);
 
 
     /* flash_quality_flag is not packed. */
-    if ((ret = nc_inq_varid(ncid, FLASH_QUALITY_FLAG, &flash_quality_flag_varid)))
+    if ((ret = nc_inq_varid(ncid, FLASH_QUALITY_FLAG,
+                            &flash_quality_flag_varid)))
 	NC_ERR(ret);
 
     /* Read the flash variables. */
@@ -292,10 +303,10 @@ glm_read_flash_structs(int ncid, size_t *nflash, GLM_FLASH_T *flash)
 */
 int
 glm_read_flash_arrays(int ncid, size_t *nflash,
-                      unsigned int *time_offset_of_first_event,
-                      unsigned int *time_offset_of_last_event,
-                      unsigned int *frame_time_offset_of_first_event,
-                      unsigned int *frame_time_offset_of_last_event,
+                      float *time_offset_of_first_event,
+                      float *time_offset_of_last_event,
+                      float *frame_time_offset_of_first_event,
+                      float *frame_time_offset_of_last_event,
                       float *lat, float *lon, float *area, float *energy,
                       short *quality_flag)
 {
