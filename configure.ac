@@ -6,7 +6,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address.
-AC_INIT([ncglm], [1.0], [])
+AC_INIT([ncglm], [1.0], [edwardjameshartnett@gmail.com])
 
 # Find out about the host we're building on.
 AC_CANONICAL_HOST

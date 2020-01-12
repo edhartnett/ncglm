@@ -15,11 +15,40 @@
  *
  * @section intro Introduction
  *
+ * The Geostationary Lightning Mapper is an instrument on the GOES-16
+ * and GOES-17 geostationary satellites. The GLM is a high-speed
+ * camera, tuned to a narrow bandwidth to detect lightning events.
+ *
+ * The ncglm library is a C/Fortran library to assist researchers
+ * using these data.
+ *
  * @section events Events
+ *
+ * Every event detected is listed in the Events.
+ *
+ * Use glm_read_event_arrays() to read the event data into arrays.
+ *
+ * Use glm_read_event_structs() to read the event data into an array
+ * of struct.
  *
  * @section groups Groups
  *
+ * When events happen at adjacent pixels or times, they are grouped
+ * togehter into a Group.
+ *
+ * Use glm_read_group_arrays() to read group data into arrays.
+ *
+ * Use glm_read_group_structs() to read the group data into an array
+ * of struct.
+ *
  * @section flashes Flashes
+ *
+ * Groups of sufficient size and duration are categorized as Flashes.
+ *
+ * Use glm_read_flash_arrays() to read group data into arrays.
+ *
+ * Use glm_read_flash_structs() to read the flash data into an array
+ * of struct.
  *
  */
 
