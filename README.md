@@ -1,2 +1,5 @@
 # ncglm
-A C/Fortran library to assist users of the Geostationary Lightning Mapper (GLM) data.
+
+The ncglm C/Fortran library assists users of the Geostationary Lightning
+Mapper (GLM) data.
+
