@@ -14,7 +14,7 @@ jobs:
     steps:
      - uses: actions/checkout@v2
      - name: Get dependencies
-       run: apt-get dist-upgrade
+       run: sudo apt-get dist-upgrade
      - name: auto configure
        run: autoconf
      - name: configure
