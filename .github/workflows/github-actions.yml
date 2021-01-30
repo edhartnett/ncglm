@@ -1,8 +1,9 @@
 name: mwm_workflow
 
+
 on:
   push:
-    branches: [ mwmw-fixactions ]
+    
   pull_request:
     branches: [ master ]
 
@@ -13,8 +14,6 @@ jobs:
 
     steps:
      - uses: actions/checkout@v2
-#      - name: Get dependencies
-#        run: sudo apt-get dist-upgrade
      - name: Get netCDF
        run: sudo apt-get install libnetcdf-dev
      - name: auto configure
