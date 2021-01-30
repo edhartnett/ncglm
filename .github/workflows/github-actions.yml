@@ -1,8 +1,8 @@
 name: mwm_workflow
 
 on:
-#   push:
-#     branches: [ mwm_start ]
+  push:
+    branches: [ mwmw-fixactions ]
   pull_request:
     branches: [ master ]
 
