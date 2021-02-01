@@ -1,0 +1,4 @@
+%module glm
+%{
+#include "ncglm"
+%}
