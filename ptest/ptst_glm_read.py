@@ -2,4 +2,8 @@
 
 # Maximilian McClelland 1/29/21
 
-import ../psrc/ncglm
+import psrc.ncglm
+
+def main():
+    print("Testing Python Wrapper")
+    
