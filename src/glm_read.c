@@ -14,7 +14,7 @@
 #include <math.h>
 #include <assert.h>
 #include <netcdf.h>
-#include "ncglm.h"
+#include "../include/ncglm.h"
 
 /** Name of title attribute. */
 #define TITLE "title"
@@ -148,7 +148,7 @@ read_scalars(int ncid, GLM_SCALAR_T *glm_scalar)
 	NC_ERR(ret);
     if ((ret = nc_get_var_double(ncid, product_time_bounds_varid, glm_scalar->product_time_bounds)))
     	NC_ERR(ret);
-    
+
     if ((ret = nc_inq_varid(ncid, LIGHTNING_WAVELENGTH, &lightning_wavelength_varid)))
 	NC_ERR(ret);
     if ((ret = nc_get_var_float(ncid, lightning_wavelength_varid, &glm_scalar->lightning_wavelength)))
@@ -158,7 +158,7 @@ read_scalars(int ncid, GLM_SCALAR_T *glm_scalar)
 	NC_ERR(ret);
     if ((ret = nc_get_var_float(ncid, lightning_wavelength_bounds_varid, glm_scalar->lightning_wavelength_bounds)))
     	NC_ERR(ret);
-    
+
     if ((ret = nc_inq_varid(ncid, GROUP_TIME_THRESHOLD, &group_time_threshold_varid)))
 	NC_ERR(ret);
     if ((ret = nc_get_var_float(ncid, group_time_threshold_varid, &glm_scalar->group_time_threshold)))
@@ -338,7 +338,7 @@ glm_read_file(char *file_name, int verbose)
     GLM_SCALAR_T glm_scalar;
 
     int ret;
-    
+
     /* Open the data file as read-only. */
     if ((ret = nc_open(file_name, NC_NOWRITE, &ncid)))
 	NC_ERR(ret);
@@ -359,7 +359,7 @@ glm_read_file(char *file_name, int verbose)
     /* Read the size of the dimensions. */
     if ((ret = glm_read_dims(ncid, &nevents, &ngroups, &nflashes)))
 	return GLM_ERR_MEMORY;
-    
+
     if (verbose)
 	printf("nflashes %zu ngroups %zu nevents %zu\n", nflashes,
 	       ngroups, nevents);
@@ -396,13 +396,13 @@ glm_read_file(char *file_name, int verbose)
     free(event);
     free(group);
     free(flash);
-    
+
     return 0;
 }
 
 /**
  * Read the contents of the GLM file into arrays of data.
- * 
+ *
  * @param file_name GLM file to open and read.
  * @param verbose Non-zero to get some printf output as file is read.
  *
@@ -433,7 +433,7 @@ glm_read_file_arrays(char *file_name, int verbose)
     GLM_SCALAR_T glm_scalar;
 
     int ret;
-    
+
     /* Open the data file as read-only. */
     if ((ret = nc_open(file_name, NC_NOWRITE, &ncid)))
 	NC_ERR(ret);
@@ -441,7 +441,7 @@ glm_read_file_arrays(char *file_name, int verbose)
     /* Read the size of the dimensions. */
     if ((ret = glm_read_dims(ncid, &nevents, &ngroups, &nflashes)))
 	return GLM_ERR_MEMORY;
-    
+
     if (verbose)
 	printf("nflashes %zu ngroups %zu nevents %zu\n", nflashes,
 	       ngroups, nevents);
@@ -487,6 +487,6 @@ glm_read_file_arrays(char *file_name, int verbose)
     free(event_id);
     free(group);
     free(flash);
-    
+
     return 0;
 }

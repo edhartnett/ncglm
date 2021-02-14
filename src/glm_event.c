@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "ncglm.h"
+#include "../include/ncglm.h"
 
 /**
  * @mainpage The Geostationary Lightning Mapper C Library

@@ -1,0 +1,5 @@
+CFLAGS =  $(CXXFLAGS_COMMON) $(CFLAGS_PERSONAL) $(CADD) -shared -fPIC
+CXXFLAGS =  $(CXXFLAGS_COMMON) $(CFLAGS_PERSONAL) $(CADD) -shared -fPIC
+
+../../src/glm_group.so: ../src/glm_group.o
+	gcc -shared -o ../src/glm_group.so ../src/glm_group.o

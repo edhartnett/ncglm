@@ -47,3 +47,4 @@
 /.idea
 /venv
 /docs
+/src/*.so
