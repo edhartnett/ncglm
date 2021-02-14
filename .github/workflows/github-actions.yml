@@ -24,6 +24,6 @@ jobs:
      - name: make -j distcheck
        run: make -j distcheck
      - name: Configure Wrapper Makefiles
-       run: chmod +x psrc/make.sh
+       run: chmod +x make.sh
      - name: Runnign Wrapper Makefiles
-       run: ./psrc/make.sh
+       run: ./make.sh
