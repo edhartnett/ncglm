@@ -4,13 +4,13 @@
 
 import ctypes
 
-#Creating Libraries
+# Creating Libraries
 glm_group = ctypes.CDLL("../src/glm_group.so")
 glm_event = ctypes.CDLL("../src/glm_event.so")
 glm_read = ctypes.CDLL("../src/glmread_.so")
 glm_flash = ctypes.CDLL("../src/glm_flash.so")
 
-#Specifying Functions
+# Specifying Functions
 read_group_vars = glm_group.read_group_vars
 glm_read_group_structs = glm_group.glm_read_group_structs
 glm_read_group_arrays = glm_group.glm_read_group_arrays
@@ -28,5 +28,5 @@ read_scalars = glm_read.read_scalars
 glm_read_file = glm_read.glm_read_file
 glm_read_file_arrays = glm_read.glm_read_file_arrays
 
-#Specify inputs
+# Specify inputs
 # read_group_vars.argtypes = [ctypes.c_int, ctypes.]

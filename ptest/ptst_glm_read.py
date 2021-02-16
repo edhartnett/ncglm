@@ -4,6 +4,6 @@
 
 import psrc.ncglm
 
+
 def main():
     print("Testing Python Wrapper")
-    
