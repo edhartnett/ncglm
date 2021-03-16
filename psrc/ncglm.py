@@ -4,8 +4,11 @@
 
 import ctypes
 import os
+# Temporary color library to hilight errors in console.
+# Will be removed in final version but is just here to make it a bit eaiser for me to understand the results.
 from termcolor import colored
 
+# Full path is necessiary for cytpes function.
 temp = os.path.abspath(__file__)
 temp = os.path.realpath(temp)
 temp = os.path.dirname(temp)
@@ -13,6 +16,7 @@ end = len(temp) - 4
 path = temp[:end] + "src"
 lib = os.path.join(path, "libncglm.so")
 
+# Checks that path is correct. Will also be removed later.
 path = "\nPath: \n" + lib + "\n"
 print(colored(path, 'green'))
 
