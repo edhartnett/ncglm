@@ -96,5 +96,7 @@ AC_CONFIG_FILES([Makefile
 	test/Makefile
 	ftest/Makefile
 	docs/Makefile
+	psrc/Makefile
+	ptest/Makefile
         ])
 AC_OUTPUT()

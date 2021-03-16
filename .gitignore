@@ -49,3 +49,5 @@
 /docs
 /src/*.so
 /psrc/AttemptOne
+/cmake-build-debug
+/psrc/makes

@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "../include/ncglm.h"
+#include "ncglm.h"
 
 /**
  * Read and unpack all the flash data in the file. It will be loaded

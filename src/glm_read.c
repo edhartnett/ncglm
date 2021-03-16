@@ -14,7 +14,7 @@
 #include <math.h>
 #include <assert.h>
 #include <netcdf.h>
-#include "../include/ncglm.h"
+#include "ncglm.h"
 
 /** Name of title attribute. */
 #define TITLE "title"

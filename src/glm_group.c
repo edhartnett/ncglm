@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "../include/ncglm.h"
+#include "ncglm.h"
 
 /**
  * This internal function will read and unpack all the group data in
