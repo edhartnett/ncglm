@@ -49,6 +49,15 @@ test "x$enable_fortran" = xyes || enable_fortran=no
 AC_MSG_RESULT([$enable_fortran])
 AM_CONDITIONAL(BUILD_FORTRAN, [test "x$enable_fortran" = xyes])
 
+# Does the user want to enable Python library?
+AC_MSG_CHECKING([whether Python library should be built])
+AC_ARG_ENABLE([python],
+              [AS_HELP_STRING([--enable-python],
+                              [build the ncglm Python library.])])
+test "x$enable_python" = xyes || enable_python=no
+AC_MSG_RESULT([$enable_python])
+AM_CONDITIONAL(BUILD_PYTHON, [test "x$enable_python" = xyes])
+
 # Does the user want to build documentation?
 AC_MSG_CHECKING([whether documentation should be build (requires doxygen)])
 AC_ARG_ENABLE([docs],
