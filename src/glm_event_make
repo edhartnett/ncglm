@@ -1,5 +1,0 @@
-CFLAGS =  $(CXXFLAGS_COMMON) $(CFLAGS_PERSONAL) $(CADD) -shared -fPIC
-CXXFLAGS =  $(CXXFLAGS_COMMON) $(CFLAGS_PERSONAL) $(CADD) -shared -fPIC
-
-glm_group.so: glm_group.o
-	gcc -shared -o glm_group.so glm_group.o
