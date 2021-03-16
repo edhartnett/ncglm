@@ -18,6 +18,12 @@ FSRC = fsrc
 FTEST = ftest
 endif
 
+# Does the user want the Python API?
+if BUILD_PYTHON
+PSRC = psrc
+PTEST = ptest
+endif
+
 SUBDIRS = cmake include src ${FSRC} test ${FTEST} ${DOCS} ${PSRC} ${PTEST}
 
 EXTRA_DIST = test-driver-verbose LICENSE README.md CMakeLists.txt
