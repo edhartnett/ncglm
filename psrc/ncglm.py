@@ -18,7 +18,7 @@ lib = os.path.join(path, "libncglm.so")
 
 # Checks that path is correct. Will also be removed later.
 path = "\nPath: \n" + lib + "\n"
-print(colored(path, 'green'))
+print(colored(path, 'blue'))
 
 # Creating Libraries
 try:
