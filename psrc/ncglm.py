@@ -48,3 +48,4 @@ glm_read_file_arrays = lib_ncglm.glm_read_file_arrays
 
 # Specify inputs
 # read_group_vars.argtypes = [ctypes.c_int, ctypes.]
+
