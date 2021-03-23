@@ -45,3 +45,10 @@
 /missing
 /Notes.txt
 /.idea
+/venv
+/docs
+/src/*.so
+/psrc/AttemptOne
+/cmake-build-debug
+/psrc/makes
+/psrc/__pycache__
