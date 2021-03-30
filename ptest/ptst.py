@@ -10,7 +10,7 @@ NUM_VAL = 5
 
 
 def main():
-    print("Testing Python Wrapper\n")
+    print("TestingPythonWrapper\n")
     print("Testing GLM event reads.")
     glm_event()
 
@@ -40,4 +40,7 @@ def fabs(equation):
 
 
 def print_time(offset):
-    print(time.asctime(time.localtime(time.time()+offset)))
+    print(time.asctime(time.localtime(time.time() + offset)))
+
+
+main()
