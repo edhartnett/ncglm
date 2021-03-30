@@ -4,5 +4,7 @@
 # Maximilian McClelland 3/12/2021
 # Boulder
 
-EXTRA_DIST = ncglm.py.in
+# !Convert nclgm.py.in to nclgm.py here!
+
+EXTRA_DIST = ncglm.py
 
