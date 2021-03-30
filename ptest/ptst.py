@@ -2,6 +2,7 @@
 
 # Maximilian McClelland 1/29/21
 
+# This works on my local machine but seemed not to on Ed's. Need to figure out why that is.
 import psrc.ncglm
 import time
 
