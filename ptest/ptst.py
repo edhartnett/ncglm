@@ -14,6 +14,10 @@ def main():
     print("TestingPythonWrapper\n")
     print("Testing GLM event reads.")
     glm_event()
+    print("Testing GLM flash reads.")
+    glm_flash()
+    print("Testing GLM group reads.")
+    glm_group()
 
 
 def glm_event():
@@ -27,6 +31,18 @@ def glm_event():
     x_lon = [-105.711212, -105.619804, -105.711212, -105.711212, -105.711212]
     x_energy = [1.37337e-14, 7.62985e-15, 3.05194e-15, 4.57791e-15, 4.57791e-15]
     x_parent_group_id = [467109464, 467109464, 467109465, 467109472, 467109473]
+
+
+def glm_flash():
+    print("testing GLM flash reads...")
+
+
+def glm_read():
+    print("Reading Geostationary Lightning Mapper data")
+
+
+def glm_group():
+    print("testing GLM group reads...")
 
 
 def are_same(a, b):
