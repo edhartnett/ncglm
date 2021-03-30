@@ -56,7 +56,9 @@ AC_ARG_ENABLE([python],
                               [build the ncglm Python library.])])
 test "x$enable_python" = xyes || enable_python=no
 AC_MSG_RESULT([$enable_python])
-AM_PATH_PYTHON([3.0])
+if test "x$enable_python" = xyes; then
+    AM_PATH_PYTHON([3.0])
+fi
 AM_CONDITIONAL(BUILD_PYTHON, [test "x$enable_python" = xyes])
 
 # Does the user want to build documentation?
