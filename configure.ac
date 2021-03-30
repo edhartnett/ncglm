@@ -51,12 +51,12 @@ AM_CONDITIONAL(BUILD_FORTRAN, [test "x$enable_fortran" = xyes])
 
 # Does the user want to enable Python library?
 AC_MSG_CHECKING([whether Python library should be built])
-AM_PATH_PYTHON([3.0])
 AC_ARG_ENABLE([python],
               [AS_HELP_STRING([--enable-python],
                               [build the ncglm Python library.])])
 test "x$enable_python" = xyes || enable_python=no
 AC_MSG_RESULT([$enable_python])
+AM_PATH_PYTHON([3.0])
 AM_CONDITIONAL(BUILD_PYTHON, [test "x$enable_python" = xyes])
 
 # Does the user want to build documentation?
