@@ -6,5 +6,5 @@
 
 # !Convert nclgm.py.in to nclgm.py here!
 
-EXTRA_DIST = ncglm.py
+EXTRA_DIST = ncglm.py.in
 
