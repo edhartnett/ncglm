@@ -8,6 +8,7 @@ import time
 
 EPSILON = 0.0001
 NUM_VAL = 5
+NC_MAX_INT = 2147483647
 
 
 def main():
@@ -45,7 +46,18 @@ def glm_flash():
 
 
 def glm_read():
+    global NC_MAX_INT
     print("Reading Geostationary Lightning Mapper data")
+    c = 0
+    verbose = 0
+    timing = 0
+    meta_read_us = 0
+    meta_max_read_us = 0
+    meta_min_read_us = NC_MAX_INT
+    meta_tot_read_us = 0
+    meta_avg_read_us = 0
+    num_trials = 1
+    t = 0
 
 
 def glm_group():
@@ -67,7 +79,9 @@ def print_time(offset):
     print(time.asctime(time.localtime(time.time() + offset)))
 
 def show_att(ncid, varid, name):
+    value = ""
 
+    ret = 0
     return 0
 
 main()
