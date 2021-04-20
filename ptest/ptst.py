@@ -32,9 +32,16 @@ def glm_event():
     x_energy = [1.37337e-14, 7.62985e-15, 3.05194e-15, 4.57791e-15, 4.57791e-15]
     x_parent_group_id = [467109464, 467109464, 467109465, 467109472, 467109473]
 
+    i = 0
+    ret = 0
+
 
 def glm_flash():
     print("testing GLM flash reads...")
+    total_err = 0
+    err = 0
+    ncid = 0
+    ret = 0
 
 
 def glm_read():
@@ -59,5 +66,8 @@ def fabs(equation):
 def print_time(offset):
     print(time.asctime(time.localtime(time.time() + offset)))
 
+def show_att(ncid, varid, name):
+
+    return 0
 
 main()
