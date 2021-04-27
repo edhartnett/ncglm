@@ -10,6 +10,7 @@ EPSILON = 0.0001
 NUM_VAL = 5
 NC_MAX_INT = 2147483647
 
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -21,13 +22,14 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+
 def main():
-    print("TestingPythonWrapper\n")
-    print("Testing GLM event reads.")
+    print("\n\nTestingPythonWrapper\n")
+    print(f"{bcolors.OKGREEN}Testing GLM event reads.{bcolors.ENDC}")
     glm_event()
-    print("Testing GLM flash reads.")
+    print(f"{bcolors.OKGREEN}Testing GLM flash reads.{bcolors.ENDC}")
     glm_flash()
-    print("Testing GLM group reads.")
+    print(f"{bcolors.OKGREEN}Testing GLM group reads.{bcolors.ENDC}")
     glm_group()
 
 
@@ -36,7 +38,7 @@ def glm_event():
     global NUM_VAL
     total_err = 0
     err = 0
-    print("testing GLM event reads...")
+    print(f"{bcolors.WARNING}testing GLM event reads...{bcolors.ENDC}")
     x_time = [-0.475699, -0.475699, -0.444037, -0.332646, -0.330739]
     x_lat = [23.9904, 23.9945, 23.9904, 23.9904, 23.9904]
     x_lon = [-105.711212, -105.619804, -105.711212, -105.711212, -105.711212]
@@ -48,7 +50,7 @@ def glm_event():
 
 
 def glm_flash():
-    print("testing GLM flash reads...")
+    print(f"{bcolors.WARNING}testing GLM flash reads...{bcolors.ENDC}")
     total_err = 0
     err = 0
     ncid = 0
@@ -71,7 +73,7 @@ def glm_read():
 
 
 def glm_group():
-    print("testing GLM group reads...")
+    print(f"{bcolors.WARNING}testing GLM group reads...{bcolors.ENDC}")
 
 
 def are_same(a, b):
@@ -88,10 +90,12 @@ def fabs(equation):
 def print_time(offset):
     print(time.asctime(time.localtime(time.time() + offset)))
 
+
 def show_att(ncid, varid, name):
     value = ""
 
     ret = 0
     return 0
+
 
 main()
