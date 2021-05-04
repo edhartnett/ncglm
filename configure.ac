@@ -99,6 +99,9 @@ fi
 # Make sure the test data file is available in vpath builds.
 AC_CONFIG_LINKS([test/OR_GLM-L2-LCFA_G17_s20192692359400_e20192700000000_c20192700000028.nc:test/OR_GLM-L2-LCFA_G17_s20192692359400_e20192700000000_c20192700000028.nc])
 
+# Variable Substitition
+AC_SUBST(pathToPython, "/home/mwmttl/github/ncglm/src/.libs/libncglm.so")
+
 # These files will be created when the configure script is run.
 AC_CONFIG_FILES([Makefile
 	cmake/Makefile
@@ -110,5 +113,6 @@ AC_CONFIG_FILES([Makefile
 	docs/Makefile
 	psrc/Makefile
 	ptest/Makefile
+	psrc/ncglm.py
         ])
 AC_OUTPUT()

@@ -1,0 +1,159 @@
+# This is the Python wrapper for the ncglm library.
+
+# Maximilian McClelland 1/29/21
+
+import ctypes
+import os
+
+print(" ")
+
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+# Creating Libraries
+lib = &pathToPython&
+success = ""
+failed = ""
+
+try:
+    lib_ncglm = ctypes.CDLL(lib)
+except Exception as err:
+    err = "Could not load NCGLM Library:\n" + str(err)
+    print(f"{bcolors.FAIL}" + err + f"{bcolors.ENDC}")
+    exit()
+
+# Specifying Functions
+try:
+    read_group_vars = lib_ncglm.read_group_vars
+    success = success + "read_group_vars, "
+except Exception as err:
+    err = "Could not load read_group_vars function:\n" + str(err) + "\n"
+    failed = failed + "read_group_vars, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+
+try:
+    glm_read_group_structs = lib_ncglm.glm_read_group_structs
+    success = success + "glm_read_group_structs, "
+except Exception as err:
+    err = "Could not load glm_read_group_structs function:\n" + str(err) + "\n"
+    failed = failed + "glm_read_group_structs, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+
+try:
+    glm_read_group_arrays = lib_ncglm.glm_read_group_arraysP
+    success = success + "glm_read_group_arrays, "
+except Exception as err:
+    err = "Could not load glm_read_group_arrays function:\n" + str(err) + "\n"
+    failed = failed + "glm_read_group_arrays, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+try:
+    read_event_vars = lib_ncglm.read_event_vars
+    success = success + "read_event_vars, "
+except Exception as err:
+    err = "Could not load read_event_vars function:\n" + str(err) + "\n"
+    failed = failed + "read_event_vars, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+try:
+    read_flash_vars = lib_ncglm.read_flash_vars
+    success = success + "read_flash_vars, "
+except Exception as err:
+    err = "Could not load read_flash_vars function:\n" + str(err) + "\n"
+    failed = failed + "read_flash_vars, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+
+try:
+    glm_read_event_structs = lib_ncglm.glm_read_event_structs
+    success = success + "glm_read_event_structs, "
+except Exception as err:
+    err = "Could not load glm_read_event_structs function:\n" + str(err) + "\n"
+    failed = failed + "glm_read_event_structs, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+
+try:
+    glm_read_event_arrays = lib_ncglm.glm_read_event_arrays
+    success = success + "glm_read_event_arrays, "
+except Exception as err:
+    err = "Could not load glm_read_event_arrays function:\n" + str(err) + "\n"
+    failed = failed + "glm_read_event_arrays, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+
+try:
+    glm_read_flash_structs = lib_ncglm.glm_read_flash_structs
+    success = success + "glm_read_flash_structs, "
+except Exception as err:
+    err = "Could not load glm_read_flash_structs function:\n" + str(err) + "\n"
+    failed = failed + "glm_read_flash_structs, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+
+try:
+    glm_read_flash_arrays = lib_ncglm.glm_read_flash_arrays
+    success = success + "glm_read_flash_arrays, "
+except Exception as err:
+    err = "Could not load glm_read_flash_arrays function:\n" + str(err) + "\n"
+    failed = failed + "glm_read_flash_arrays, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+
+try:
+    glm_read_dims = lib_ncglm.glm_read_dims
+    success = success + "glm_read_dims, "
+except Exception as err:
+    err = "Could not load glm_read_dims function:\n" + str(err) + "\n"
+    failed = failed + "glm_read_dims, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+
+try:
+    read_scalars = lib_ncglm.read_scalars
+    success = success + "read_scalars, "
+except Exception as err:
+    err = "Could not load read_scalars function:\n" + str(err) + "\n"
+    failed = failed + "read_scalars, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+
+try:
+    glm_read_file = lib_ncglm.glm_read_file
+    success = success + "glm_read_file, "
+except Exception as err:
+    err = "Could not load glm_read_file function:\n" + str(err) + "\n"
+    failed = failed + "glm_read_file, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+
+try:
+    glm_read_file_arrays = lib_ncglm.glm_read_file_arrays
+    success = success + "glm_read_file_arrays, "
+except Exception as err:
+    err = "Could not load glm_read_file_arrays function:\n" + str(err) + "\n"
+    failed = failed + "glm_read_file_arrays, "
+    print(f"{bcolors.WARNING}" + err + f"{bcolors.ENDC}")
+
+leng = len(success)
+if leng > 0:
+    end = leng - 2
+    success = "Succeeded: " + success[:end] + "."
+else:
+    success = "None Succeeded."
+
+leng = len(failed)
+if leng > 0:
+    end = leng - 2
+    failed = "Failures: " + failed[:end] + "."
+else:
+    failed = "None Failed!"
+
+success = f"{bcolors.OKGREEN}" + success + f"{bcolors.ENDC}"
+failed = f"{bcolors.FAIL}" + failed + f"{bcolors.ENDC}"
+
+print("\n" + success)
+print("\n" + failed)
+
+# Specify inputs
+# read_group_vars.argtypes = [ctypes.c_int, ctypes.]

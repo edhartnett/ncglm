@@ -57,3 +57,4 @@
 /ptest/Makefile
 /ptest/Makefile.in
 test-driver
+/psrc/ncglm.py
